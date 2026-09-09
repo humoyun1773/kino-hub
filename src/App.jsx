@@ -82,11 +82,12 @@ export default function App() {
         onLogout={handleLogout}
       />
 
-      {/* Hero Showcase (shown when no search) */}
+      {/* Hero Showcase with 3D Visual Cards & Ticker */}
       {!searchTerm && (
         <HeroBanner
           featuredMovies={featuredMovies}
           onSelectMovie={setSelectedMovie}
+          onOpenRandom={() => setIsRandomOpen(true)}
         />
       )}
 

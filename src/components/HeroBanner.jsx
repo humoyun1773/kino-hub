@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { Play, Star, Calendar, Clock, ChevronLeft, ChevronRight, Info } from 'lucide-react';
+import { Play, Star, Calendar, Clock, Sparkles, Flame, Users, Film, Tv, ShieldCheck, ChevronRight } from 'lucide-react';
 
 export default function HeroBanner({
   featuredMovies,
-  onSelectMovie
+  onSelectMovie,
+  onOpenRandom
 }) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [activeTab, setActiveTab] = useState(0);
 
   useEffect(() => {
     if (featuredMovies.length <= 1) return;
     const timer = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % featuredMovies.length);
-    }, 7000);
+    }, 8000);
     return () => clearInterval(timer);
   }, [featuredMovies.length]);
 
@@ -19,209 +21,352 @@ export default function HeroBanner({
   const movie = featuredMovies[currentIndex];
 
   return (
-    <div style={{
-      position: 'relative',
-      width: '100%',
-      minHeight: '480px',
-      height: '64vh',
-      maxHeight: '620px',
-      overflow: 'hidden',
-      borderRadius: '0 0 28px 28px',
-      background: '#0a0e1a'
-    }}>
-      {/* Background Backdrop with transition */}
-      <img
-        key={movie.id}
-        src={movie.backdrop}
-        alt={movie.title}
-        className="animate-fade-in"
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          objectPosition: 'center 25%',
-          filter: 'brightness(0.6)'
-        }}
-      />
-
-      {/* Dark Vignette Gradient */}
+    <section style={{ position: 'relative', overflow: 'hidden' }}>
+      {/* Ambient Theater Lighting Glows */}
       <div style={{
         position: 'absolute',
-        inset: 0,
-        background: 'linear-gradient(to right, #06080d 0%, rgba(6, 8, 13, 0.88) 45%, rgba(6, 8, 13, 0.25) 80%, rgba(6, 8, 13, 0.95) 100%), linear-gradient(to top, #06080d 0%, transparent 60%)'
+        top: '-10%',
+        left: '20%',
+        width: '600px',
+        height: '600px',
+        background: 'radial-gradient(circle, rgba(225, 29, 72, 0.28) 0%, rgba(225, 29, 72, 0) 70%)',
+        filter: 'blur(80px)',
+        pointerEvents: 'none',
+        zIndex: 1
       }} />
 
-      {/* Content */}
-      <div className="animate-fade-in" key={`content-${movie.id}`} style={{
-        position: 'relative',
-        height: '100%',
+      <div style={{
+        position: 'absolute',
+        top: '20%',
+        right: '5%',
+        width: '500px',
+        height: '500px',
+        background: 'radial-gradient(circle, rgba(59, 130, 246, 0.22) 0%, rgba(59, 130, 246, 0) 70%)',
+        filter: 'blur(80px)',
+        pointerEvents: 'none',
+        zIndex: 1
+      }} />
+
+      {/* Main Showcase Container */}
+      <div style={{
         maxWidth: '1280px',
         margin: '0 auto',
-        padding: '0 32px',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'flex-end',
-        paddingBottom: '54px',
+        padding: '24px 24px 10px 24px',
+        position: 'relative',
         zIndex: 10
       }}>
-        {/* Badges */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap', marginBottom: '14px' }}>
-          <span style={{
-            background: 'linear-gradient(135deg, #e11d48, #be123c)',
-            color: '#fff',
-            fontWeight: 700,
-            fontSize: '11px',
-            textTransform: 'uppercase',
-            letterSpacing: '1px',
-            padding: '4px 12px',
-            borderRadius: '6px',
-            boxShadow: '0 0 15px rgba(225, 29, 72, 0.5)'
-          }}>
-            Ommabop Tavsiya
-          </span>
-          <div className="badge-rating">
-            <Star size={14} fill="#facc15" color="#facc15" />
-            <span>{movie.rating}</span>
-          </div>
-          <span style={{ color: '#cbd5e1', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '5px' }}>
-            <Calendar size={14} /> {movie.year}
-          </span>
-          <span style={{ color: '#cbd5e1', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '5px' }}>
-            <Clock size={14} /> {movie.duration}
-          </span>
-        </div>
-
-        {/* Title */}
-        <h1 style={{
-          fontSize: 'clamp(28px, 4.5vw, 48px)',
-          fontWeight: 800,
-          color: '#ffffff',
-          lineHeight: 1.15,
-          marginBottom: '12px',
-          maxWidth: '800px',
-          textShadow: '0 4px 25px rgba(0,0,0,0.9)'
+        <div style={{
+          background: 'linear-gradient(145deg, rgba(17, 24, 39, 0.85) 0%, rgba(10, 14, 26, 0.95) 100%)',
+          borderRadius: '28px',
+          border: '1px solid rgba(255, 255, 255, 0.12)',
+          padding: '40px',
+          boxShadow: '0 30px 60px -15px rgba(0, 0, 0, 0.9), 0 0 40px rgba(225, 29, 72, 0.15)',
+          position: 'relative',
+          overflow: 'hidden'
         }}>
-          {movie.title}
-        </h1>
-
-        {/* Genres */}
-        <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
-          {movie.genres.map((g) => (
-            <span key={g} style={{
-              fontSize: '12px',
-              padding: '3px 12px',
-              borderRadius: '9999px',
-              background: 'rgba(255, 255, 255, 0.1)',
-              border: '1px solid rgba(255, 255, 255, 0.15)',
-              color: '#e2e8f0'
-            }}>
-              {g}
-            </span>
-          ))}
-        </div>
-
-        {/* Overview */}
-        <p className="line-clamp-3" style={{
-          fontSize: '15px',
-          color: '#cbd5e1',
-          maxWidth: '640px',
-          marginBottom: '26px',
-          lineHeight: 1.65
-        }}>
-          {movie.overview}
-        </p>
-
-        {/* Actions */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap' }}>
-          <button
-            onClick={() => onSelectMovie(movie)}
-            className="btn-primary"
-            style={{ padding: '13px 26px', fontSize: '15px' }}
-          >
-            <Play size={18} fill="#ffffff" />
-            <span>Treylerni tomosha qilish</span>
-          </button>
-
-          <button
-            onClick={() => onSelectMovie(movie)}
-            className="btn-secondary"
-            style={{ padding: '13px 22px', fontSize: '15px' }}
-          >
-            <Info size={18} />
-            <span>Batafsil maʼlumot</span>
-          </button>
-        </div>
-
-        {/* Carousel controls */}
-        {featuredMovies.length > 1 && (
+          {/* Subtle Background Pattern */}
           <div style={{
             position: 'absolute',
-            bottom: '26px',
-            right: '32px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px'
-          }}>
-            <button
-              onClick={() => setCurrentIndex((prev) => (prev - 1 + featuredMovies.length) % featuredMovies.length)}
-              style={{
-                width: '38px',
-                height: '38px',
-                borderRadius: '50%',
-                background: 'rgba(255, 255, 255, 0.12)',
-                border: '1px solid rgba(255, 255, 255, 0.2)',
-                color: '#fff',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-                transition: 'background 0.2s'
-              }}
-            >
-              <ChevronLeft size={18} />
-            </button>
+            inset: 0,
+            backgroundImage: `url(${movie.backdrop})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            opacity: 0.18,
+            filter: 'blur(10px)',
+            transform: 'scale(1.1)',
+            pointerEvents: 'none'
+          }} />
 
-            <div style={{ display: 'flex', gap: '6px' }}>
-              {featuredMovies.map((_, i) => (
-                <div
-                  key={i}
-                  onClick={() => setCurrentIndex(i)}
+          {/* Grid Layout: Left Info, Right Visual Card */}
+          <div style={{
+            position: 'relative',
+            zIndex: 10,
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+            gap: '40px',
+            alignItems: 'center'
+          }}>
+            {/* Left Column: Catchy Text & Action */}
+            <div>
+              {/* Highlight Badge */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap', marginBottom: '18px' }}>
+                <div style={{
+                  background: 'linear-gradient(135deg, #e11d48, #be123c)',
+                  color: '#fff',
+                  fontSize: '12px',
+                  fontWeight: 800,
+                  letterSpacing: '0.8px',
+                  padding: '5px 14px',
+                  borderRadius: '9999px',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  boxShadow: '0 0 20px rgba(225, 29, 72, 0.6)'
+                }}>
+                  <Flame size={15} color="#fff" />
+                  <span>{movie.tag || 'TOP PREMYERA'}</span>
+                </div>
+
+                <div className="badge-rating">
+                  <Star size={14} fill="#facc15" color="#facc15" />
+                  <span>{movie.rating} IMDb</span>
+                </div>
+
+                <div style={{
+                  background: 'rgba(34, 197, 94, 0.15)',
+                  border: '1px solid rgba(34, 197, 94, 0.3)',
+                  color: '#4ade80',
+                  fontSize: '12px',
+                  fontWeight: 700,
+                  padding: '4px 10px',
+                  borderRadius: '6px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px'
+                }}>
+                  <ShieldCheck size={14} /> 4K Ultra HD
+                </div>
+              </div>
+
+              {/* Movie Title */}
+              <h1 style={{
+                fontSize: 'clamp(32px, 4.2vw, 54px)',
+                fontWeight: 900,
+                color: '#ffffff',
+                lineHeight: 1.1,
+                marginBottom: '16px',
+                letterSpacing: '-1px',
+                textShadow: '0 4px 25px rgba(0, 0, 0, 0.9)'
+              }}>
+                {movie.title}
+              </h1>
+
+              {/* Quick Meta */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '14px', color: '#94a3b8', fontSize: '14px', marginBottom: '18px' }}>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Calendar size={15} /> {movie.year}</span>
+                <span>•</span>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Clock size={15} /> {movie.duration}</span>
+                <span>•</span>
+                <span style={{ color: '#fb7185', fontWeight: 600 }}>{movie.genres?.join(', ')}</span>
+              </div>
+
+              {/* Synopsis */}
+              <p style={{
+                fontSize: '15px',
+                color: '#cbd5e1',
+                lineHeight: 1.65,
+                marginBottom: '28px',
+                maxWidth: '560px'
+              }}>
+                {movie.overview}
+              </p>
+
+              {/* Action Buttons */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap', marginBottom: '24px' }}>
+                <button
+                  onClick={() => onSelectMovie(movie)}
+                  className="btn-primary"
                   style={{
-                    width: currentIndex === i ? '26px' : '8px',
-                    height: '8px',
-                    borderRadius: '4px',
-                    background: currentIndex === i ? '#e11d48' : 'rgba(255, 255, 255, 0.3)',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s ease'
+                    padding: '14px 28px',
+                    fontSize: '15px',
+                    borderRadius: '12px',
+                    boxShadow: '0 0 25px rgba(225, 29, 72, 0.6)'
                   }}
-                />
-              ))}
+                >
+                  <Play size={20} fill="#ffffff" />
+                  <span>Treylerni tomosha qilish</span>
+                </button>
+
+                <button
+                  onClick={onOpenRandom}
+                  className="btn-secondary"
+                  style={{
+                    padding: '14px 22px',
+                    fontSize: '15px',
+                    borderRadius: '12px'
+                  }}
+                >
+                  <Sparkles size={18} color="#fb7185" />
+                  <span>Menga film tanlab ber</span>
+                </button>
+              </div>
+
+              {/* Live viewers indicator */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: '#94a3b8' }}>
+                <span style={{
+                  width: '9px',
+                  height: '9px',
+                  borderRadius: '50%',
+                  background: '#22c55e',
+                  display: 'inline-block',
+                  boxShadow: '0 0 10px #22c55e'
+                }} />
+                <span><strong>1,840 kishi</strong> hozir ushbu filmni koʻrmoqda</span>
+              </div>
             </div>
 
-            <button
-              onClick={() => setCurrentIndex((prev) => (prev + 1) % featuredMovies.length)}
-              style={{
-                width: '38px',
-                height: '38px',
-                borderRadius: '50%',
-                background: 'rgba(255, 255, 255, 0.12)',
-                border: '1px solid rgba(255, 255, 255, 0.2)',
-                color: '#fff',
+            {/* Right Column: 3D Cinema Showcase Card with Live Previews */}
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '18px' }}>
+              {/* Main Visual Poster Card */}
+              <div
+                onClick={() => onSelectMovie(movie)}
+                className="movie-card animate-scale-up"
+                style={{
+                  position: 'relative',
+                  width: '100%',
+                  maxWidth: '380px',
+                  aspectRatio: '16/10',
+                  borderRadius: '20px',
+                  overflow: 'hidden',
+                  cursor: 'pointer',
+                  border: '2px solid rgba(225, 29, 72, 0.4)',
+                  boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.95), 0 0 30px rgba(225, 29, 72, 0.35)'
+                }}
+              >
+                <img
+                  src={movie.backdrop || movie.poster}
+                  alt={movie.title}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    filter: 'brightness(0.75)'
+                  }}
+                />
+
+                {/* Center Play Button Overlay */}
+                <div style={{
+                  position: 'absolute',
+                  inset: 0,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  background: 'radial-gradient(circle, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.75) 100%)'
+                }}>
+                  <div style={{
+                    width: '64px',
+                    height: '64px',
+                    borderRadius: '50%',
+                    background: 'linear-gradient(135deg, #e11d48, #be123c)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    boxShadow: '0 0 30px rgba(225, 29, 72, 0.85)',
+                    transform: 'scale(1)',
+                    transition: 'transform 0.25s ease'
+                  }}>
+                    <Play size={28} fill="#ffffff" style={{ marginLeft: '4px' }} />
+                  </div>
+                  <span style={{
+                    color: '#ffffff',
+                    fontWeight: 800,
+                    fontSize: '13px',
+                    marginTop: '12px',
+                    letterSpacing: '1px',
+                    textTransform: 'uppercase',
+                    textShadow: '0 2px 10px rgba(0, 0, 0, 0.9)'
+                  }}>
+                    Rasmiy Treyler (HD)
+                  </span>
+                </div>
+
+                {/* Bottom Banner Inside Card */}
+                <div style={{
+                  position: 'absolute',
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  padding: '10px 14px',
+                  background: 'rgba(6, 8, 13, 0.85)',
+                  backdropFilter: 'blur(8px)',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center'
+                }}>
+                  <span style={{ fontSize: '13px', fontWeight: 700, color: '#fff' }}>{movie.title}</span>
+                  <span style={{ fontSize: '12px', color: '#facc15', fontWeight: 700 }}>⭐ {movie.rating}</span>
+                </div>
+              </div>
+
+              {/* Interactive Thumbnail Carousel */}
+              <div style={{
                 display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-                transition: 'background 0.2s'
-              }}
-            >
-              <ChevronRight size={18} />
-            </button>
+                gap: '12px',
+                width: '100%',
+                maxWidth: '380px',
+                justifyContent: 'space-between'
+              }}>
+                {featuredMovies.map((m, idx) => {
+                  const isSelected = currentIndex === idx;
+                  return (
+                    <div
+                      key={m.id}
+                      onClick={() => setCurrentIndex(idx)}
+                      style={{
+                        flex: 1,
+                        aspectRatio: '16/10',
+                        borderRadius: '10px',
+                        overflow: 'hidden',
+                        cursor: 'pointer',
+                        position: 'relative',
+                        border: isSelected ? '2px solid #e11d48' : '1px solid rgba(255, 255, 255, 0.1)',
+                        boxShadow: isSelected ? '0 0 15px rgba(225, 29, 72, 0.6)' : 'none',
+                        transition: 'all 0.25s ease',
+                        transform: isSelected ? 'scale(1.05)' : 'scale(1)'
+                      }}
+                    >
+                      <img
+                        src={m.backdrop || m.poster}
+                        alt={m.title}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                      />
+                      <div style={{
+                        position: 'absolute',
+                        inset: 0,
+                        background: isSelected ? 'transparent' : 'rgba(0, 0, 0, 0.5)'
+                      }} />
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           </div>
-        )}
+        </div>
       </div>
-    </div>
+
+      {/* Catchy Live Ticker under Hero */}
+      <div style={{
+        background: 'rgba(225, 29, 72, 0.08)',
+        borderTop: '1px solid rgba(225, 29, 72, 0.2)',
+        borderBottom: '1px solid rgba(225, 29, 72, 0.2)',
+        padding: '10px 24px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '18px',
+        color: '#f43f5e',
+        fontSize: '13px',
+        fontWeight: 700,
+        letterSpacing: '0.3px',
+        flexWrap: 'wrap',
+        marginTop: '16px'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <Flame size={16} /> <span>TOP 5 KINOLAR:</span>
+        </div>
+        <div style={{ display: 'flex', gap: '16px', color: '#e2e8f0', fontWeight: 500, flexWrap: 'wrap' }}>
+          <span>#1 Dune: Part Two (8.8)</span>
+          <span>•</span>
+          <span>#2 Inception (8.8)</span>
+          <span>•</span>
+          <span>#3 Interstellar (8.7)</span>
+          <span>•</span>
+          <span>#4 The Dark Knight (9.0)</span>
+          <span>•</span>
+          <span>#5 Oppenheimer (8.9)</span>
+        </div>
+      </div>
+    </section>
   );
 }
