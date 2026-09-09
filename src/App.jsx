@@ -4,61 +4,42 @@ import HeroBanner from './components/HeroBanner';
 import MovieCard from './components/MovieCard';
 import MovieModal from './components/MovieModal';
 import RandomMovieModal from './components/RandomMovieModal';
-import WatchlistModal from './components/WatchlistModal';
 import ApiKeyModal from './components/ApiKeyModal';
+import AuthPage from './components/AuthPage';
 import { GENRES, INITIAL_MOVIES } from './data/moviesData';
-import { Flame, Sparkles, Film, Heart } from 'lucide-react';
+import { Flame, Sparkles, Film } from 'lucide-react';
 
 export default function App() {
+  // Authentication State
+  const [currentUser, setCurrentUser] = useState(() => {
+    try {
+      const saved = localStorage.getItem('kinohub_current_user');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
+
   const [movies, setMovies] = useState(INITIAL_MOVIES);
   const [selectedGenre, setSelectedGenre] = useState('Barchasi');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [isRandomOpen, setIsRandomOpen] = useState(false);
-  const [isWatchlistOpen, setIsWatchlistOpen] = useState(false);
   const [isApiKeyOpen, setIsApiKeyOpen] = useState(false);
   
-  // Watchlist stored in LocalStorage
-  const [watchlist, setWatchlist] = useState(() => {
-    try {
-      const saved = localStorage.getItem('kinohub_watchlist');
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
-  });
-
   // TMDB API Key stored in LocalStorage
   const [apiKey, setApiKey] = useState(() => {
     return localStorage.getItem('kinohub_tmdb_key') || '';
   });
 
-  // Save watchlist changes
-  useEffect(() => {
-    try {
-      localStorage.setItem('kinohub_watchlist', JSON.stringify(watchlist));
-    } catch (e) {
-      console.error(e);
-    }
-  }, [watchlist]);
-
-  const handleToggleWatchlist = (movie) => {
-    setWatchlist((prev) => {
-      const exists = prev.some((m) => m.id === movie.id);
-      if (exists) {
-        return prev.filter((m) => m.id !== movie.id);
-      } else {
-        return [movie, ...prev];
-      }
-    });
+  const handleLoginSuccess = (user) => {
+    setCurrentUser(user);
+    localStorage.setItem('kinohub_current_user', JSON.stringify(user));
   };
 
-  const handleRemoveFromWatchlist = (id) => {
-    setWatchlist((prev) => prev.filter((m) => m.id !== id));
-  };
-
-  const handleClearWatchlist = () => {
-    setWatchlist([]);
+  const handleLogout = () => {
+    setCurrentUser(null);
+    localStorage.removeItem('kinohub_current_user');
   };
 
   const handleSaveApiKey = (key) => {
@@ -83,17 +64,22 @@ export default function App() {
     return movies.filter((m) => m.featured);
   }, [movies]);
 
+  // If NOT logged in, show real Login / Sign Up Page
+  if (!currentUser) {
+    return <AuthPage onLoginSuccess={handleLoginSuccess} />;
+  }
+
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <div className="animate-fade-in" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       {/* Top Navbar */}
       <Navbar
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
         onOpenRandom={() => setIsRandomOpen(true)}
-        onOpenWatchlist={() => setIsWatchlistOpen(true)}
-        watchlistCount={watchlist.length}
         onOpenApiKey={() => setIsApiKeyOpen(true)}
         hasApiKey={Boolean(apiKey)}
+        currentUser={currentUser}
+        onLogout={handleLogout}
       />
 
       {/* Hero Showcase (shown when no search) */}
@@ -101,8 +87,6 @@ export default function App() {
         <HeroBanner
           featuredMovies={featuredMovies}
           onSelectMovie={setSelectedMovie}
-          watchlist={watchlist}
-          onToggleWatchlist={handleToggleWatchlist}
         />
       )}
 
@@ -172,10 +156,11 @@ export default function App() {
                     cursor: 'pointer',
                     whiteSpace: 'nowrap',
                     border: 'none',
-                    transition: 'all 0.2s ease',
+                    transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
                     background: active ? 'linear-gradient(135deg, #e11d48, #be123c)' : 'rgba(255, 255, 255, 0.06)',
                     color: active ? '#ffffff' : '#cbd5e1',
-                    boxShadow: active ? '0 4px 14px rgba(225, 29, 72, 0.4)' : 'none'
+                    boxShadow: active ? '0 4px 16px rgba(225, 29, 72, 0.45)' : 'none',
+                    transform: active ? 'scale(1.05)' : 'scale(1)'
                   }}
                 >
                   {g}
@@ -187,7 +172,7 @@ export default function App() {
 
         {/* Movies Grid */}
         {filteredMovies.length === 0 ? (
-          <div style={{
+          <div className="animate-fade-in" style={{
             textAlign: 'center',
             padding: '80px 20px',
             background: 'rgba(255, 255, 255, 0.02)',
@@ -220,8 +205,6 @@ export default function App() {
                 key={movie.id}
                 movie={movie}
                 onSelect={setSelectedMovie}
-                isSaved={watchlist.some((m) => m.id === movie.id)}
-                onToggleWatchlist={handleToggleWatchlist}
               />
             ))}
           </div>
@@ -231,7 +214,7 @@ export default function App() {
       {/* Footer */}
       <footer style={{
         borderTop: '1px solid rgba(255, 255, 255, 0.06)',
-        background: '#06080d',
+        background: '#05070a',
         padding: '30px 24px',
         textAlign: 'center',
         color: '#64748b',
@@ -253,8 +236,6 @@ export default function App() {
         <MovieModal
           movie={selectedMovie}
           onClose={() => setSelectedMovie(null)}
-          isSaved={watchlist.some((m) => m.id === selectedMovie.id)}
-          onToggleWatchlist={handleToggleWatchlist}
           allMovies={movies}
           onSelectMovie={setSelectedMovie}
         />
@@ -265,16 +246,6 @@ export default function App() {
           movies={movies}
           onClose={() => setIsRandomOpen(false)}
           onSelectMovie={setSelectedMovie}
-        />
-      )}
-
-      {isWatchlistOpen && (
-        <WatchlistModal
-          watchlist={watchlist}
-          onClose={() => setIsWatchlistOpen(false)}
-          onSelectMovie={setSelectedMovie}
-          onRemoveFromWatchlist={handleRemoveFromWatchlist}
-          onClearWatchlist={handleClearWatchlist}
         />
       )}
 

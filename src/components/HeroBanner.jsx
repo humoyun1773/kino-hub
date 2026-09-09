@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Play, Heart, Star, Calendar, Clock, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Play, Star, Calendar, Clock, ChevronLeft, ChevronRight, Info } from 'lucide-react';
 
 export default function HeroBanner({
   featuredMovies,
-  onSelectMovie,
-  watchlist,
-  onToggleWatchlist
+  onSelectMovie
 }) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -13,29 +11,30 @@ export default function HeroBanner({
     if (featuredMovies.length <= 1) return;
     const timer = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % featuredMovies.length);
-    }, 8000);
+    }, 7000);
     return () => clearInterval(timer);
   }, [featuredMovies.length]);
 
   if (!featuredMovies.length) return null;
   const movie = featuredMovies[currentIndex];
-  const isSaved = watchlist.some((m) => m.id === movie.id);
 
   return (
     <div style={{
       position: 'relative',
       width: '100%',
       minHeight: '480px',
-      height: '62vh',
+      height: '64vh',
       maxHeight: '620px',
       overflow: 'hidden',
-      borderRadius: '0 0 24px 24px',
+      borderRadius: '0 0 28px 28px',
       background: '#0a0e1a'
     }}>
-      {/* Background Backdrop */}
+      {/* Background Backdrop with transition */}
       <img
+        key={movie.id}
         src={movie.backdrop}
         alt={movie.title}
+        className="animate-fade-in"
         style={{
           position: 'absolute',
           top: 0,
@@ -44,20 +43,19 @@ export default function HeroBanner({
           height: '100%',
           objectFit: 'cover',
           objectPosition: 'center 25%',
-          transition: 'all 0.7s ease-in-out',
           filter: 'brightness(0.6)'
         }}
       />
 
-      {/* Dark Vignette Overlay */}
+      {/* Dark Vignette Gradient */}
       <div style={{
         position: 'absolute',
         inset: 0,
-        background: 'linear-gradient(to right, #080a10 0%, rgba(8, 10, 16, 0.85) 45%, rgba(8, 10, 16, 0.2) 80%, rgba(8, 10, 16, 0.9) 100%), linear-gradient(to top, #080a10 0%, transparent 60%)'
+        background: 'linear-gradient(to right, #06080d 0%, rgba(6, 8, 13, 0.88) 45%, rgba(6, 8, 13, 0.25) 80%, rgba(6, 8, 13, 0.95) 100%), linear-gradient(to top, #06080d 0%, transparent 60%)'
       }} />
 
       {/* Content */}
-      <div style={{
+      <div className="animate-fade-in" key={`content-${movie.id}`} style={{
         position: 'relative',
         height: '100%',
         maxWidth: '1280px',
@@ -66,7 +64,7 @@ export default function HeroBanner({
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'flex-end',
-        paddingBottom: '50px',
+        paddingBottom: '54px',
         zIndex: 10
       }}>
         {/* Badges */}
@@ -78,8 +76,9 @@ export default function HeroBanner({
             fontSize: '11px',
             textTransform: 'uppercase',
             letterSpacing: '1px',
-            padding: '4px 10px',
-            borderRadius: '6px'
+            padding: '4px 12px',
+            borderRadius: '6px',
+            boxShadow: '0 0 15px rgba(225, 29, 72, 0.5)'
           }}>
             Ommabop Tavsiya
           </span>
@@ -103,7 +102,7 @@ export default function HeroBanner({
           lineHeight: 1.15,
           marginBottom: '12px',
           maxWidth: '800px',
-          textShadow: '0 4px 20px rgba(0,0,0,0.8)'
+          textShadow: '0 4px 25px rgba(0,0,0,0.9)'
         }}>
           {movie.title}
         </h1>
@@ -113,7 +112,7 @@ export default function HeroBanner({
           {movie.genres.map((g) => (
             <span key={g} style={{
               fontSize: '12px',
-              padding: '3px 10px',
+              padding: '3px 12px',
               borderRadius: '9999px',
               background: 'rgba(255, 255, 255, 0.1)',
               border: '1px solid rgba(255, 255, 255, 0.15)',
@@ -130,7 +129,7 @@ export default function HeroBanner({
           color: '#cbd5e1',
           maxWidth: '640px',
           marginBottom: '26px',
-          lineHeight: 1.6
+          lineHeight: 1.65
         }}>
           {movie.overview}
         </p>
@@ -140,19 +139,19 @@ export default function HeroBanner({
           <button
             onClick={() => onSelectMovie(movie)}
             className="btn-primary"
-            style={{ padding: '12px 24px', fontSize: '15px' }}
+            style={{ padding: '13px 26px', fontSize: '15px' }}
           >
             <Play size={18} fill="#ffffff" />
             <span>Treylerni tomosha qilish</span>
           </button>
 
           <button
-            onClick={() => onToggleWatchlist(movie)}
+            onClick={() => onSelectMovie(movie)}
             className="btn-secondary"
-            style={{ padding: '12px 20px', fontSize: '15px' }}
+            style={{ padding: '13px 22px', fontSize: '15px' }}
           >
-            <Heart size={18} color={isSaved ? '#f43f5e' : '#fff'} fill={isSaved ? '#f43f5e' : 'none'} />
-            <span>{isSaved ? "Watchlistda saqlangan" : "Watchlistga qo'shish"}</span>
+            <Info size={18} />
+            <span>Batafsil maʼlumot</span>
           </button>
         </div>
 
@@ -160,7 +159,7 @@ export default function HeroBanner({
         {featuredMovies.length > 1 && (
           <div style={{
             position: 'absolute',
-            bottom: '24px',
+            bottom: '26px',
             right: '32px',
             display: 'flex',
             alignItems: 'center',
@@ -169,8 +168,8 @@ export default function HeroBanner({
             <button
               onClick={() => setCurrentIndex((prev) => (prev - 1 + featuredMovies.length) % featuredMovies.length)}
               style={{
-                width: '36px',
-                height: '36px',
+                width: '38px',
+                height: '38px',
                 borderRadius: '50%',
                 background: 'rgba(255, 255, 255, 0.12)',
                 border: '1px solid rgba(255, 255, 255, 0.2)',
@@ -178,7 +177,8 @@ export default function HeroBanner({
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                transition: 'background 0.2s'
               }}
             >
               <ChevronLeft size={18} />
@@ -190,7 +190,7 @@ export default function HeroBanner({
                   key={i}
                   onClick={() => setCurrentIndex(i)}
                   style={{
-                    width: currentIndex === i ? '24px' : '8px',
+                    width: currentIndex === i ? '26px' : '8px',
                     height: '8px',
                     borderRadius: '4px',
                     background: currentIndex === i ? '#e11d48' : 'rgba(255, 255, 255, 0.3)',
@@ -204,8 +204,8 @@ export default function HeroBanner({
             <button
               onClick={() => setCurrentIndex((prev) => (prev + 1) % featuredMovies.length)}
               style={{
-                width: '36px',
-                height: '36px',
+                width: '38px',
+                height: '38px',
                 borderRadius: '50%',
                 background: 'rgba(255, 255, 255, 0.12)',
                 border: '1px solid rgba(255, 255, 255, 0.2)',
@@ -213,7 +213,8 @@ export default function HeroBanner({
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                transition: 'background 0.2s'
               }}
             >
               <ChevronRight size={18} />

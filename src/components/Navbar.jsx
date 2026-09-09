@@ -1,21 +1,23 @@
-import React from 'react';
-import { Film, Search, Heart, Dices, KeyRound, X } from 'lucide-react';
+import React, { useState } from 'react';
+import { Film, Search, Dices, KeyRound, X, LogOut, User } from 'lucide-react';
 
 export default function Navbar({
   searchTerm,
   setSearchTerm,
   onOpenRandom,
-  onOpenWatchlist,
-  watchlistCount,
   onOpenApiKey,
-  hasApiKey
+  hasApiKey,
+  currentUser,
+  onLogout
 }) {
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
+
   return (
     <header className="glass-header" style={{
       position: 'sticky',
       top: 0,
       zIndex: 40,
-      padding: '14px 24px',
+      padding: '14px 28px',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
@@ -27,20 +29,20 @@ export default function Navbar({
         style={{
           display: 'flex',
           alignItems: 'center',
-          gap: '10px',
+          gap: '12px',
           cursor: 'pointer',
           userSelect: 'none'
         }}
       >
-        <div style={{
-          width: '40px',
-          height: '40px',
+        <div className="animate-float" style={{
+          width: '42px',
+          height: '42px',
           borderRadius: '12px',
           background: 'linear-gradient(135deg, #e11d48, #be123c)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          boxShadow: '0 0 16px rgba(225, 29, 72, 0.5)'
+          boxShadow: '0 0 20px rgba(225, 29, 72, 0.55)'
         }}>
           <Film size={22} color="#ffffff" />
         </div>
@@ -48,7 +50,7 @@ export default function Navbar({
           <span className="gradient-title" style={{ fontSize: '22px', fontWeight: 800, letterSpacing: '-0.5px' }}>
             KinoHub
           </span>
-          <span style={{ fontSize: '10px', display: 'block', color: '#94a3b8', marginTop: '-4px', fontWeight: 600 }}>
+          <span style={{ fontSize: '10px', display: 'block', color: '#94a3b8', marginTop: '-3px', fontWeight: 600 }}>
             KINO VA SERIALLAR
           </span>
         </div>
@@ -57,7 +59,7 @@ export default function Navbar({
       {/* Search Bar */}
       <div style={{
         flex: 1,
-        maxWidth: '500px',
+        maxWidth: '520px',
         position: 'relative',
         display: 'flex',
         alignItems: 'center'
@@ -73,19 +75,21 @@ export default function Navbar({
             background: 'rgba(255, 255, 255, 0.06)',
             border: '1px solid rgba(255, 255, 255, 0.12)',
             borderRadius: '9999px',
-            padding: '10px 40px 10px 42px',
+            padding: '11px 40px 11px 42px',
             color: '#fff',
             fontSize: '14px',
             outline: 'none',
-            transition: 'border-color 0.2s, background 0.2s'
+            transition: 'border-color 0.2s, background 0.2s, box-shadow 0.2s'
           }}
           onFocus={(e) => {
-            e.target.style.borderColor = 'rgba(244, 63, 94, 0.6)';
+            e.target.style.borderColor = 'rgba(244, 63, 94, 0.65)';
             e.target.style.background = 'rgba(255, 255, 255, 0.09)';
+            e.target.style.boxShadow = '0 0 15px rgba(225, 29, 72, 0.2)';
           }}
           onBlur={(e) => {
             e.target.style.borderColor = 'rgba(255, 255, 255, 0.12)';
             e.target.style.background = 'rgba(255, 255, 255, 0.06)';
+            e.target.style.boxShadow = 'none';
           }}
         />
         {searchTerm && (
@@ -108,40 +112,16 @@ export default function Navbar({
       </div>
 
       {/* Action Buttons */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
         {/* Random Movie Button */}
         <button
           onClick={onOpenRandom}
           className="btn-secondary"
-          style={{ padding: '8px 16px', fontSize: '13px' }}
+          style={{ padding: '9px 18px', fontSize: '13px' }}
           title="Kechqurun nima ko'rishni bilmayotganlar uchun tasodifiy film"
         >
           <Dices size={17} color="#fb7185" />
           <span>Tasodifiy film</span>
-        </button>
-
-        {/* Watchlist Button */}
-        <button
-          onClick={onOpenWatchlist}
-          className="btn-secondary"
-          style={{ padding: '8px 16px', fontSize: '13px', position: 'relative' }}
-          title="Saqlangan filmlar"
-        >
-          <Heart size={17} color={watchlistCount > 0 ? '#f43f5e' : '#cbd5e1'} fill={watchlistCount > 0 ? '#f43f5e' : 'none'} />
-          <span>Watchlist</span>
-          {watchlistCount > 0 && (
-            <span style={{
-              background: '#e11d48',
-              color: '#fff',
-              fontSize: '11px',
-              fontWeight: 700,
-              padding: '2px 7px',
-              borderRadius: '9999px',
-              marginLeft: '4px'
-            }}>
-              {watchlistCount}
-            </span>
-          )}
         </button>
 
         {/* API Settings Button */}
@@ -149,7 +129,7 @@ export default function Navbar({
           onClick={onOpenApiKey}
           className="btn-secondary"
           style={{
-            padding: '8px 12px',
+            padding: '9px 12px',
             fontSize: '13px',
             border: hasApiKey ? '1px solid rgba(34, 197, 94, 0.4)' : undefined
           }}
@@ -160,6 +140,96 @@ export default function Navbar({
             <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#22c55e' }} />
           )}
         </button>
+
+        {/* User Profile & Logout */}
+        {currentUser && (
+          <div style={{ position: 'relative' }}>
+            <div
+              onClick={() => setShowProfileMenu(!showProfileMenu)}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '6px 12px 6px 6px',
+                borderRadius: '9999px',
+                background: 'rgba(255, 255, 255, 0.08)',
+                border: '1px solid rgba(255, 255, 255, 0.12)',
+                cursor: 'pointer',
+                userSelect: 'none'
+              }}
+            >
+              <div style={{
+                width: '32px',
+                height: '32px',
+                borderRadius: '50%',
+                background: 'linear-gradient(135deg, #f43f5e, #be123c)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '14px',
+                fontWeight: 700,
+                color: '#fff'
+              }}>
+                {currentUser.name ? currentUser.name[0].toUpperCase() : 'U'}
+              </div>
+              <span style={{ fontSize: '13px', fontWeight: 600, color: '#f1f5f9' }}>
+                {currentUser.name || 'Foydalanuvchi'}
+              </span>
+            </div>
+
+            {/* Dropdown Menu */}
+            {showProfileMenu && (
+              <div
+                className="animate-scale-up"
+                style={{
+                  position: 'absolute',
+                  top: '46px',
+                  right: 0,
+                  width: '180px',
+                  background: '#0e131f',
+                  border: '1px solid rgba(255, 255, 255, 0.12)',
+                  borderRadius: '14px',
+                  padding: '6px',
+                  boxShadow: '0 15px 30px rgba(0, 0, 0, 0.7)',
+                  zIndex: 50
+                }}
+              >
+                <div style={{ padding: '8px 12px', borderBottom: '1px solid rgba(255, 255, 255, 0.08)', marginBottom: '4px' }}>
+                  <div style={{ fontSize: '11px', color: '#64748b' }}>Ulangan hisob</div>
+                  <div style={{ fontSize: '13px', fontWeight: 600, color: '#e2e8f0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    {currentUser.email}
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => {
+                    setShowProfileMenu(false);
+                    onLogout();
+                  }}
+                  style={{
+                    width: '100%',
+                    padding: '8px 12px',
+                    borderRadius: '8px',
+                    border: 'none',
+                    background: 'transparent',
+                    color: '#f87171',
+                    fontSize: '13px',
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    transition: 'background 0.2s'
+                  }}
+                  onMouseEnter={(e) => e.target.style.background = 'rgba(239, 68, 68, 0.1)'}
+                  onMouseLeave={(e) => e.target.style.background = 'transparent'}
+                >
+                  <LogOut size={16} /> Chiqish (Logout)
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </header>
   );

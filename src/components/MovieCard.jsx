@@ -1,15 +1,13 @@
 import React from 'react';
-import { Star, Heart, Play } from 'lucide-react';
+import { Star, Play } from 'lucide-react';
 
 export default function MovieCard({
   movie,
-  onSelect,
-  isSaved,
-  onToggleWatchlist
+  onSelect
 }) {
   return (
     <div
-      className="movie-card"
+      className="movie-card animate-scale-up"
       onClick={() => onSelect(movie)}
       style={{
         display: 'flex',
@@ -23,7 +21,7 @@ export default function MovieCard({
         width: '100%',
         aspectRatio: '2/3',
         overflow: 'hidden',
-        backgroundColor: '#161d2d'
+        backgroundColor: '#131929'
       }}>
         <img
           src={movie.poster}
@@ -32,8 +30,7 @@ export default function MovieCard({
           style={{
             width: '100%',
             height: '100%',
-            objectFit: 'cover',
-            transition: 'transform 0.4s ease'
+            objectFit: 'cover'
           }}
           onError={(e) => {
             e.target.src = 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=600&auto=format&fit=crop&q=80';
@@ -45,52 +42,23 @@ export default function MovieCard({
           position: 'absolute',
           top: '10px',
           left: '10px',
-          right: '10px',
           display: 'flex',
-          justifyContent: 'space-between',
           alignItems: 'center',
           pointerEvents: 'none'
         }}>
-          <div className="badge-rating" style={{ pointerEvents: 'auto' }}>
+          <div className="badge-rating">
             <Star size={12} fill="#facc15" color="#facc15" />
             <span>{movie.rating}</span>
           </div>
-
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onToggleWatchlist(movie);
-            }}
-            style={{
-              pointerEvents: 'auto',
-              width: '34px',
-              height: '34px',
-              borderRadius: '50%',
-              background: 'rgba(0, 0, 0, 0.65)',
-              backdropFilter: 'blur(8px)',
-              border: '1px solid rgba(255, 255, 255, 0.15)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              cursor: 'pointer',
-              transition: 'transform 0.2s ease, background 0.2s ease'
-            }}
-            title={isSaved ? "Watchlistdan o'chirish" : "Watchlistga qo'shish"}
-          >
-            <Heart
-              size={16}
-              color={isSaved ? '#f43f5e' : '#fff'}
-              fill={isSaved ? '#f43f5e' : 'none'}
-            />
-          </button>
         </div>
 
         {/* Hover overlay play button */}
         <div style={{
           position: 'absolute',
           inset: 0,
-          background: 'linear-gradient(to top, rgba(8, 10, 16, 0.9) 0%, transparent 60%)',
+          background: 'linear-gradient(to top, rgba(6, 8, 13, 0.92) 0%, rgba(6, 8, 13, 0.3) 50%, transparent 100%)',
           display: 'flex',
+          flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
           opacity: 0,
@@ -100,25 +68,28 @@ export default function MovieCard({
         onMouseLeave={(e) => e.currentTarget.style.opacity = '0'}
         >
           <div style={{
-            width: '52px',
-            height: '52px',
+            width: '54px',
+            height: '54px',
             borderRadius: '50%',
             background: 'linear-gradient(135deg, #e11d48, #be123c)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: '0 0 20px rgba(225, 29, 72, 0.6)',
-            transform: 'scale(0.95)',
-            transition: 'transform 0.2s ease'
+            boxShadow: '0 0 25px rgba(225, 29, 72, 0.7)',
+            transform: 'scale(0.9)',
+            transition: 'transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
           }}>
             <Play size={24} fill="#fff" color="#fff" style={{ marginLeft: '3px' }} />
           </div>
+          <span style={{ marginTop: '10px', fontSize: '12px', fontWeight: 700, color: '#fff', letterSpacing: '0.5px' }}>
+            TREYLERNI KOʻRISH
+          </span>
         </div>
       </div>
 
       {/* Info */}
       <div style={{
-        padding: '14px',
+        padding: '16px',
         display: 'flex',
         flexDirection: 'column',
         flex: 1,
@@ -150,9 +121,9 @@ export default function MovieCard({
           </h3>
         </div>
 
-        <div style={{ marginTop: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ marginTop: '12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <span style={{ fontSize: '12px', color: '#64748b' }}>{movie.duration || '2s'}</span>
-          <span style={{ fontSize: '12px', color: '#38bdf8', fontWeight: 600 }}>Treyler ▶</span>
+          <span style={{ fontSize: '12px', color: '#f43f5e', fontWeight: 700 }}>Batafsil →</span>
         </div>
       </div>
     </div>
