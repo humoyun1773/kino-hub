@@ -10,12 +10,10 @@ export default function AuthPage({ onLoginSuccess }) {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  // Pre-seed demo user if none exists
   const getUsers = () => {
     try {
       const stored = localStorage.getItem('kinohub_users');
       if (stored) return JSON.parse(stored);
-      // default demo user
       const defaultUsers = [
         { email: 'user@kino.uz', password: '123', name: 'Humoyun' }
       ];
@@ -114,7 +112,6 @@ export default function AuthPage({ onLoginSuccess }) {
       overflow: 'hidden',
       background: '#06080d'
     }}>
-      {/* Dynamic Cinematic Background with Blurs */}
       <div style={{
         position: 'absolute',
         inset: 0,
@@ -125,7 +122,6 @@ export default function AuthPage({ onLoginSuccess }) {
         transform: 'scale(1.05)'
       }} />
 
-      {/* Radiant Glow Lights */}
       <div style={{
         position: 'absolute',
         top: '-15%',
@@ -137,19 +133,8 @@ export default function AuthPage({ onLoginSuccess }) {
         pointerEvents: 'none'
       }} />
 
-      <div style={{
-        position: 'absolute',
-        bottom: '-10%',
-        right: '20%',
-        width: '450px',
-        height: '450px',
-        background: 'radial-gradient(circle, rgba(249, 115, 22, 0.25) 0%, transparent 70%)',
-        filter: 'blur(50px)',
-        pointerEvents: 'none'
-      }} />
-
       {/* Main Glass Card */}
-      <div className="glass-card animate-scale-up" style={{
+      <div className="glass-card auth-card animate-scale-up" style={{
         position: 'relative',
         zIndex: 10,
         width: '100%',
@@ -160,25 +145,24 @@ export default function AuthPage({ onLoginSuccess }) {
         border: '1px solid rgba(255, 255, 255, 0.12)',
         boxShadow: '0 30px 60px -15px rgba(0, 0, 0, 0.8), 0 0 35px rgba(225, 29, 72, 0.25)'
       }}>
-        {/* Brand Logo & Heading */}
-        <div style={{ textAlign: 'center', marginBottom: '28px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '26px' }}>
           <div className="animate-float" style={{
-            width: '56px',
-            height: '56px',
+            width: '52px',
+            height: '52px',
             borderRadius: '16px',
             background: 'linear-gradient(135deg, #e11d48, #be123c)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            margin: '0 auto 14px auto',
+            margin: '0 auto 12px auto',
             boxShadow: '0 0 25px rgba(225, 29, 72, 0.6)'
           }}>
-            <Film size={30} color="#fff" />
+            <Film size={26} color="#fff" />
           </div>
-          <h1 className="gradient-title" style={{ fontSize: '28px', fontWeight: 800, letterSpacing: '-0.5px' }}>
+          <h1 className="gradient-title" style={{ fontSize: '26px', fontWeight: 800, letterSpacing: '-0.5px' }}>
             KinoHub
           </h1>
-          <p style={{ fontSize: '14px', color: '#94a3b8', marginTop: '4px' }}>
+          <p style={{ fontSize: '13px', color: '#94a3b8', marginTop: '4px' }}>
             {isLoginTab ? 'Platformaga kirish uchun profilingizga kiring' : 'Yangi profil yarating va filmlarni tomosha qiling'}
           </p>
         </div>
@@ -189,7 +173,7 @@ export default function AuthPage({ onLoginSuccess }) {
           background: 'rgba(255, 255, 255, 0.05)',
           padding: '4px',
           borderRadius: '12px',
-          marginBottom: '24px',
+          marginBottom: '20px',
           border: '1px solid rgba(255, 255, 255, 0.08)'
         }}>
           <button
@@ -197,10 +181,10 @@ export default function AuthPage({ onLoginSuccess }) {
             onClick={() => { setIsLoginTab(true); setError(''); setSuccess(''); }}
             style={{
               flex: 1,
-              padding: '10px',
+              padding: '9px',
               borderRadius: '9px',
               border: 'none',
-              fontSize: '14px',
+              fontSize: '13px',
               fontWeight: 700,
               cursor: 'pointer',
               transition: 'all 0.25s ease',
@@ -213,17 +197,17 @@ export default function AuthPage({ onLoginSuccess }) {
               gap: '6px'
             }}
           >
-            <LogIn size={16} /> Kirish
+            <LogIn size={15} /> Kirish
           </button>
           <button
             type="button"
             onClick={() => { setIsLoginTab(false); setError(''); setSuccess(''); }}
             style={{
               flex: 1,
-              padding: '10px',
+              padding: '9px',
               borderRadius: '9px',
               border: 'none',
-              fontSize: '14px',
+              fontSize: '13px',
               fontWeight: 700,
               cursor: 'pointer',
               transition: 'all 0.25s ease',
@@ -236,25 +220,24 @@ export default function AuthPage({ onLoginSuccess }) {
               gap: '6px'
             }}
           >
-            <UserPlus size={16} /> Roʻyxatdan oʻtish
+            <UserPlus size={15} /> Roʻyxatdan oʻtish
           </button>
         </div>
 
-        {/* Error / Success Feedback */}
         {error && (
           <div className="animate-fade-in" style={{
             background: 'rgba(239, 68, 68, 0.15)',
             border: '1px solid rgba(239, 68, 68, 0.35)',
             borderRadius: '10px',
             padding: '10px 14px',
-            marginBottom: '18px',
+            marginBottom: '16px',
             color: '#f87171',
             fontSize: '13px',
             display: 'flex',
             alignItems: 'center',
             gap: '8px'
           }}>
-            <AlertCircle size={17} style={{ flexShrink: 0 }} />
+            <AlertCircle size={16} style={{ flexShrink: 0 }} />
             <span>{error}</span>
           </div>
         )}
@@ -265,27 +248,26 @@ export default function AuthPage({ onLoginSuccess }) {
             border: '1px solid rgba(34, 197, 94, 0.35)',
             borderRadius: '10px',
             padding: '10px 14px',
-            marginBottom: '18px',
+            marginBottom: '16px',
             color: '#4ade80',
             fontSize: '13px',
             display: 'flex',
             alignItems: 'center',
             gap: '8px'
           }}>
-            <CheckCircle2 size={17} style={{ flexShrink: 0 }} />
+            <CheckCircle2 size={16} style={{ flexShrink: 0 }} />
             <span>{success}</span>
           </div>
         )}
 
-        {/* Forms */}
-        <form onSubmit={isLoginTab ? handleLogin : handleRegister} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <form onSubmit={isLoginTab ? handleLogin : handleRegister} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
           {!isLoginTab && (
             <div>
-              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#94a3b8', marginBottom: '6px' }}>
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#94a3b8', marginBottom: '5px' }}>
                 Ismingiz
               </label>
               <div style={{ position: 'relative' }}>
-                <User size={18} color="#64748b" style={{ position: 'absolute', left: '14px', top: '13px' }} />
+                <User size={17} color="#64748b" style={{ position: 'absolute', left: '12px', top: '12px' }} />
                 <input
                   type="text"
                   value={name}
@@ -296,9 +278,9 @@ export default function AuthPage({ onLoginSuccess }) {
                     background: 'rgba(255, 255, 255, 0.06)',
                     border: '1px solid rgba(255, 255, 255, 0.12)',
                     borderRadius: '10px',
-                    padding: '12px 14px 12px 42px',
+                    padding: '11px 14px 11px 38px',
                     color: '#fff',
-                    fontSize: '14px',
+                    fontSize: '13px',
                     outline: 'none',
                     transition: 'border-color 0.2s'
                   }}
@@ -310,11 +292,11 @@ export default function AuthPage({ onLoginSuccess }) {
           )}
 
           <div>
-            <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#94a3b8', marginBottom: '6px' }}>
+            <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#94a3b8', marginBottom: '5px' }}>
               Elektron pochta (Email)
             </label>
             <div style={{ position: 'relative' }}>
-              <Mail size={18} color="#64748b" style={{ position: 'absolute', left: '14px', top: '13px' }} />
+              <Mail size={17} color="#64748b" style={{ position: 'absolute', left: '12px', top: '12px' }} />
               <input
                 type="email"
                 value={email}
@@ -325,9 +307,9 @@ export default function AuthPage({ onLoginSuccess }) {
                   background: 'rgba(255, 255, 255, 0.06)',
                   border: '1px solid rgba(255, 255, 255, 0.12)',
                   borderRadius: '10px',
-                  padding: '12px 14px 12px 42px',
+                  padding: '11px 14px 11px 38px',
                   color: '#fff',
-                  fontSize: '14px',
+                  fontSize: '13px',
                   outline: 'none',
                   transition: 'border-color 0.2s'
                 }}
@@ -338,11 +320,11 @@ export default function AuthPage({ onLoginSuccess }) {
           </div>
 
           <div>
-            <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#94a3b8', marginBottom: '6px' }}>
+            <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#94a3b8', marginBottom: '5px' }}>
               Parol
             </label>
             <div style={{ position: 'relative' }}>
-              <Lock size={18} color="#64748b" style={{ position: 'absolute', left: '14px', top: '13px' }} />
+              <Lock size={17} color="#64748b" style={{ position: 'absolute', left: '12px', top: '12px' }} />
               <input
                 type="password"
                 value={password}
@@ -353,9 +335,9 @@ export default function AuthPage({ onLoginSuccess }) {
                   background: 'rgba(255, 255, 255, 0.06)',
                   border: '1px solid rgba(255, 255, 255, 0.12)',
                   borderRadius: '10px',
-                  padding: '12px 14px 12px 42px',
+                  padding: '11px 14px 11px 38px',
                   color: '#fff',
-                  fontSize: '14px',
+                  fontSize: '13px',
                   outline: 'none',
                   transition: 'border-color 0.2s'
                 }}
@@ -367,11 +349,11 @@ export default function AuthPage({ onLoginSuccess }) {
 
           {!isLoginTab && (
             <div>
-              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#94a3b8', marginBottom: '6px' }}>
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#94a3b8', marginBottom: '5px' }}>
                 Parolni takrorlang
               </label>
               <div style={{ position: 'relative' }}>
-                <Lock size={18} color="#64748b" style={{ position: 'absolute', left: '14px', top: '13px' }} />
+                <Lock size={17} color="#64748b" style={{ position: 'absolute', left: '12px', top: '12px' }} />
                 <input
                   type="password"
                   value={confirmPass}
@@ -382,9 +364,9 @@ export default function AuthPage({ onLoginSuccess }) {
                     background: 'rgba(255, 255, 255, 0.06)',
                     border: '1px solid rgba(255, 255, 255, 0.12)',
                     borderRadius: '10px',
-                    padding: '12px 14px 12px 42px',
+                    padding: '11px 14px 11px 38px',
                     color: '#fff',
-                    fontSize: '14px',
+                    fontSize: '13px',
                     outline: 'none',
                     transition: 'border-color 0.2s'
                   }}
@@ -398,24 +380,23 @@ export default function AuthPage({ onLoginSuccess }) {
           <button
             type="submit"
             className="btn-primary"
-            style={{ width: '100%', padding: '13px', fontSize: '15px', marginTop: '6px' }}
+            style={{ width: '100%', padding: '12px', fontSize: '14px', marginTop: '6px' }}
           >
             {isLoginTab ? (
               <>
-                <LogIn size={18} /> Kirish
+                <LogIn size={17} /> Kirish
               </>
             ) : (
               <>
-                <UserPlus size={18} /> Hisob yaratish
+                <UserPlus size={17} /> Hisob yaratish
               </>
             )}
           </button>
         </form>
 
-        {/* Demo Fast Login Helper */}
         <div style={{
-          marginTop: '22px',
-          paddingTop: '18px',
+          marginTop: '20px',
+          paddingTop: '16px',
           borderTop: '1px solid rgba(255, 255, 255, 0.08)',
           textAlign: 'center'
         }}>
@@ -426,7 +407,7 @@ export default function AuthPage({ onLoginSuccess }) {
               background: 'transparent',
               border: 'none',
               color: '#38bdf8',
-              fontSize: '13px',
+              fontSize: '12px',
               cursor: 'pointer',
               display: 'inline-flex',
               alignItems: 'center',
@@ -434,7 +415,7 @@ export default function AuthPage({ onLoginSuccess }) {
               fontWeight: 600
             }}
           >
-            <Sparkles size={15} color="#38bdf8" />
+            <Sparkles size={14} color="#38bdf8" />
             <span>Test hisobi bilan kirish (user@kino.uz / 123)</span>
           </button>
         </div>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Play, Star, Calendar, Clock, Sparkles, Flame, Users, Film, Tv, ShieldCheck, ChevronRight } from 'lucide-react';
+import { Play, Star, Calendar, Clock, Sparkles, Flame, ShieldCheck } from 'lucide-react';
 
 export default function HeroBanner({
   featuredMovies,
@@ -7,7 +7,6 @@ export default function HeroBanner({
   onOpenRandom
 }) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [activeTab, setActiveTab] = useState(0);
 
   useEffect(() => {
     if (featuredMovies.length <= 1) return;
@@ -21,7 +20,7 @@ export default function HeroBanner({
   const movie = featuredMovies[currentIndex];
 
   return (
-    <section style={{ position: 'relative', overflow: 'hidden' }}>
+    <section className="hero-container" style={{ position: 'relative', overflow: 'hidden' }}>
       {/* Ambient Theater Lighting Glows */}
       <div style={{
         position: 'absolute',
@@ -55,7 +54,7 @@ export default function HeroBanner({
         position: 'relative',
         zIndex: 10
       }}>
-        <div style={{
+        <div className="hero-card" style={{
           background: 'linear-gradient(145deg, rgba(17, 24, 39, 0.85) 0%, rgba(10, 14, 26, 0.95) 100%)',
           borderRadius: '28px',
           border: '1px solid rgba(255, 255, 255, 0.12)',
@@ -64,7 +63,7 @@ export default function HeroBanner({
           position: 'relative',
           overflow: 'hidden'
         }}>
-          {/* Subtle Background Pattern */}
+          {/* Background Poster Blur Effect */}
           <div style={{
             position: 'absolute',
             inset: 0,
@@ -82,33 +81,33 @@ export default function HeroBanner({
             position: 'relative',
             zIndex: 10,
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-            gap: '40px',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+            gap: '32px',
             alignItems: 'center'
           }}>
-            {/* Left Column: Catchy Text & Action */}
+            {/* Left Column */}
             <div>
-              {/* Highlight Badge */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap', marginBottom: '18px' }}>
+              {/* Badges */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', marginBottom: '14px' }}>
                 <div style={{
                   background: 'linear-gradient(135deg, #e11d48, #be123c)',
                   color: '#fff',
-                  fontSize: '12px',
+                  fontSize: '11px',
                   fontWeight: 800,
                   letterSpacing: '0.8px',
-                  padding: '5px 14px',
+                  padding: '4px 12px',
                   borderRadius: '9999px',
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '6px',
-                  boxShadow: '0 0 20px rgba(225, 29, 72, 0.6)'
+                  boxShadow: '0 0 16px rgba(225, 29, 72, 0.6)'
                 }}>
-                  <Flame size={15} color="#fff" />
+                  <Flame size={14} color="#fff" />
                   <span>{movie.tag || 'TOP PREMYERA'}</span>
                 </div>
 
                 <div className="badge-rating">
-                  <Star size={14} fill="#facc15" color="#facc15" />
+                  <Star size={13} fill="#facc15" color="#facc15" />
                   <span>{movie.rating} IMDb</span>
                 </div>
 
@@ -116,64 +115,64 @@ export default function HeroBanner({
                   background: 'rgba(34, 197, 94, 0.15)',
                   border: '1px solid rgba(34, 197, 94, 0.3)',
                   color: '#4ade80',
-                  fontSize: '12px',
+                  fontSize: '11px',
                   fontWeight: 700,
-                  padding: '4px 10px',
+                  padding: '3px 8px',
                   borderRadius: '6px',
                   display: 'flex',
                   alignItems: 'center',
                   gap: '4px'
                 }}>
-                  <ShieldCheck size={14} /> 4K Ultra HD
+                  <ShieldCheck size={13} /> 4K Ultra HD
                 </div>
               </div>
 
-              {/* Movie Title */}
-              <h1 style={{
-                fontSize: 'clamp(32px, 4.2vw, 54px)',
+              {/* Title */}
+              <h1 className="hero-title" style={{
+                fontSize: 'clamp(28px, 4vw, 50px)',
                 fontWeight: 900,
                 color: '#ffffff',
-                lineHeight: 1.1,
-                marginBottom: '16px',
+                lineHeight: 1.15,
+                marginBottom: '14px',
                 letterSpacing: '-1px',
                 textShadow: '0 4px 25px rgba(0, 0, 0, 0.9)'
               }}>
                 {movie.title}
               </h1>
 
-              {/* Quick Meta */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '14px', color: '#94a3b8', fontSize: '14px', marginBottom: '18px' }}>
-                <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Calendar size={15} /> {movie.year}</span>
+              {/* Meta */}
+              <div className="hero-meta-row" style={{ display: 'flex', alignItems: 'center', gap: '12px', color: '#94a3b8', fontSize: '13px', marginBottom: '16px', flexWrap: 'wrap' }}>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Calendar size={14} /> {movie.year}</span>
                 <span>•</span>
-                <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Clock size={15} /> {movie.duration}</span>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Clock size={14} /> {movie.duration}</span>
                 <span>•</span>
                 <span style={{ color: '#fb7185', fontWeight: 600 }}>{movie.genres?.join(', ')}</span>
               </div>
 
-              {/* Synopsis */}
-              <p style={{
-                fontSize: '15px',
+              {/* Overview */}
+              <p className="hero-overview" style={{
+                fontSize: '14px',
                 color: '#cbd5e1',
-                lineHeight: 1.65,
-                marginBottom: '28px',
+                lineHeight: 1.6,
+                marginBottom: '24px',
                 maxWidth: '560px'
               }}>
                 {movie.overview}
               </p>
 
               {/* Action Buttons */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap', marginBottom: '24px' }}>
+              <div className="hero-actions" style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap', marginBottom: '20px' }}>
                 <button
                   onClick={() => onSelectMovie(movie)}
                   className="btn-primary"
                   style={{
-                    padding: '14px 28px',
-                    fontSize: '15px',
+                    padding: '13px 24px',
+                    fontSize: '14px',
                     borderRadius: '12px',
                     boxShadow: '0 0 25px rgba(225, 29, 72, 0.6)'
                   }}
                 >
-                  <Play size={20} fill="#ffffff" />
+                  <Play size={18} fill="#ffffff" />
                   <span>Treylerni tomosha qilish</span>
                 </button>
 
@@ -181,21 +180,21 @@ export default function HeroBanner({
                   onClick={onOpenRandom}
                   className="btn-secondary"
                   style={{
-                    padding: '14px 22px',
-                    fontSize: '15px',
+                    padding: '13px 20px',
+                    fontSize: '14px',
                     borderRadius: '12px'
                   }}
                 >
-                  <Sparkles size={18} color="#fb7185" />
+                  <Sparkles size={16} color="#fb7185" />
                   <span>Menga film tanlab ber</span>
                 </button>
               </div>
 
-              {/* Live viewers indicator */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: '#94a3b8' }}>
+              {/* Viewers indicator */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', color: '#94a3b8' }}>
                 <span style={{
-                  width: '9px',
-                  height: '9px',
+                  width: '8px',
+                  height: '8px',
                   borderRadius: '50%',
                   background: '#22c55e',
                   display: 'inline-block',
@@ -205,12 +204,11 @@ export default function HeroBanner({
               </div>
             </div>
 
-            {/* Right Column: 3D Cinema Showcase Card with Live Previews */}
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '18px' }}>
-              {/* Main Visual Poster Card */}
+            {/* Right Column: Visual Poster Card */}
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px', width: '100%' }}>
               <div
                 onClick={() => onSelectMovie(movie)}
-                className="movie-card animate-scale-up"
+                className="movie-card hero-3d-card animate-scale-up"
                 style={{
                   position: 'relative',
                   width: '100%',
@@ -234,7 +232,6 @@ export default function HeroBanner({
                   }}
                 />
 
-                {/* Center Play Button Overlay */}
                 <div style={{
                   position: 'absolute',
                   inset: 0,
@@ -245,40 +242,36 @@ export default function HeroBanner({
                   background: 'radial-gradient(circle, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.75) 100%)'
                 }}>
                   <div style={{
-                    width: '64px',
-                    height: '64px',
+                    width: '58px',
+                    height: '58px',
                     borderRadius: '50%',
                     background: 'linear-gradient(135deg, #e11d48, #be123c)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    boxShadow: '0 0 30px rgba(225, 29, 72, 0.85)',
-                    transform: 'scale(1)',
-                    transition: 'transform 0.25s ease'
+                    boxShadow: '0 0 25px rgba(225, 29, 72, 0.85)'
                   }}>
-                    <Play size={28} fill="#ffffff" style={{ marginLeft: '4px' }} />
+                    <Play size={24} fill="#ffffff" style={{ marginLeft: '3px' }} />
                   </div>
                   <span style={{
                     color: '#ffffff',
                     fontWeight: 800,
-                    fontSize: '13px',
-                    marginTop: '12px',
+                    fontSize: '12px',
+                    marginTop: '10px',
                     letterSpacing: '1px',
-                    textTransform: 'uppercase',
-                    textShadow: '0 2px 10px rgba(0, 0, 0, 0.9)'
+                    textTransform: 'uppercase'
                   }}>
                     Rasmiy Treyler (HD)
                   </span>
                 </div>
 
-                {/* Bottom Banner Inside Card */}
                 <div style={{
                   position: 'absolute',
                   bottom: 0,
                   left: 0,
                   right: 0,
-                  padding: '10px 14px',
-                  background: 'rgba(6, 8, 13, 0.85)',
+                  padding: '8px 12px',
+                  background: 'rgba(6, 8, 13, 0.88)',
                   backdropFilter: 'blur(8px)',
                   display: 'flex',
                   justifyContent: 'space-between',
@@ -289,10 +282,10 @@ export default function HeroBanner({
                 </div>
               </div>
 
-              {/* Interactive Thumbnail Carousel */}
-              <div style={{
+              {/* Thumbnails */}
+              <div className="hero-thumbs-row" style={{
                 display: 'flex',
-                gap: '12px',
+                gap: '10px',
                 width: '100%',
                 maxWidth: '380px',
                 justifyContent: 'space-between'
@@ -306,12 +299,12 @@ export default function HeroBanner({
                       style={{
                         flex: 1,
                         aspectRatio: '16/10',
-                        borderRadius: '10px',
+                        borderRadius: '8px',
                         overflow: 'hidden',
                         cursor: 'pointer',
                         position: 'relative',
                         border: isSelected ? '2px solid #e11d48' : '1px solid rgba(255, 255, 255, 0.1)',
-                        boxShadow: isSelected ? '0 0 15px rgba(225, 29, 72, 0.6)' : 'none',
+                        boxShadow: isSelected ? '0 0 12px rgba(225, 29, 72, 0.6)' : 'none',
                         transition: 'all 0.25s ease',
                         transform: isSelected ? 'scale(1.05)' : 'scale(1)'
                       }}
@@ -335,36 +328,36 @@ export default function HeroBanner({
         </div>
       </div>
 
-      {/* Catchy Live Ticker under Hero */}
-      <div style={{
+      {/* Live Ticker */}
+      <div className="hero-ticker-wrap" style={{
         background: 'rgba(225, 29, 72, 0.08)',
         borderTop: '1px solid rgba(225, 29, 72, 0.2)',
         borderBottom: '1px solid rgba(225, 29, 72, 0.2)',
-        padding: '10px 24px',
+        padding: '9px 20px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        gap: '18px',
+        gap: '14px',
         color: '#f43f5e',
-        fontSize: '13px',
+        fontSize: '12px',
         fontWeight: 700,
         letterSpacing: '0.3px',
         flexWrap: 'wrap',
-        marginTop: '16px'
+        marginTop: '14px'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <Flame size={16} /> <span>TOP 5 KINOLAR:</span>
+          <Flame size={15} /> <span>TOP 5 KINOLAR:</span>
         </div>
-        <div style={{ display: 'flex', gap: '16px', color: '#e2e8f0', fontWeight: 500, flexWrap: 'wrap' }}>
-          <span>#1 Dune: Part Two (8.8)</span>
+        <div style={{ display: 'flex', gap: '14px', color: '#e2e8f0', fontWeight: 500, flexWrap: 'wrap' }}>
+          <span>#1 Dune: Part Two</span>
           <span>•</span>
-          <span>#2 Inception (8.8)</span>
+          <span>#2 Inception</span>
           <span>•</span>
-          <span>#3 Interstellar (8.7)</span>
+          <span>#3 Interstellar</span>
           <span>•</span>
-          <span>#4 The Dark Knight (9.0)</span>
+          <span>#4 The Dark Knight</span>
           <span>•</span>
-          <span>#5 Oppenheimer (8.9)</span>
+          <span>#5 Oppenheimer</span>
         </div>
       </div>
     </section>

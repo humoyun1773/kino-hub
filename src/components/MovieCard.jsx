@@ -15,7 +15,7 @@ export default function MovieCard({
         height: '100%'
       }}
     >
-      {/* Poster wrapper */}
+      {/* Poster */}
       <div style={{
         position: 'relative',
         width: '100%',
@@ -37,22 +37,22 @@ export default function MovieCard({
           }}
         />
 
-        {/* Top Badges */}
+        {/* Rating Badge */}
         <div style={{
           position: 'absolute',
-          top: '10px',
-          left: '10px',
+          top: '8px',
+          left: '8px',
           display: 'flex',
           alignItems: 'center',
           pointerEvents: 'none'
         }}>
-          <div className="badge-rating">
-            <Star size={12} fill="#facc15" color="#facc15" />
+          <div className="badge-rating" style={{ fontSize: '11px', padding: '3px 8px' }}>
+            <Star size={11} fill="#facc15" color="#facc15" />
             <span>{movie.rating}</span>
           </div>
         </div>
 
-        {/* Hover overlay play button */}
+        {/* Hover overlay */}
         <div style={{
           position: 'absolute',
           inset: 0,
@@ -68,51 +68,49 @@ export default function MovieCard({
         onMouseLeave={(e) => e.currentTarget.style.opacity = '0'}
         >
           <div style={{
-            width: '54px',
-            height: '54px',
+            width: '46px',
+            height: '46px',
             borderRadius: '50%',
             background: 'linear-gradient(135deg, #e11d48, #be123c)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: '0 0 25px rgba(225, 29, 72, 0.7)',
-            transform: 'scale(0.9)',
-            transition: 'transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
+            boxShadow: '0 0 20px rgba(225, 29, 72, 0.7)'
           }}>
-            <Play size={24} fill="#fff" color="#fff" style={{ marginLeft: '3px' }} />
+            <Play size={20} fill="#fff" color="#fff" style={{ marginLeft: '3px' }} />
           </div>
-          <span style={{ marginTop: '10px', fontSize: '12px', fontWeight: 700, color: '#fff', letterSpacing: '0.5px' }}>
-            TREYLERNI KOʻRISH
+          <span style={{ marginTop: '8px', fontSize: '11px', fontWeight: 700, color: '#fff', letterSpacing: '0.5px' }}>
+            KOʻRISH
           </span>
         </div>
       </div>
 
       {/* Info */}
-      <div style={{
-        padding: '16px',
+      <div className="movie-card-info" style={{
+        padding: '12px',
         display: 'flex',
         flexDirection: 'column',
         flex: 1,
         justifyContent: 'space-between'
       }}>
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
-            <span style={{ fontSize: '12px', color: '#94a3b8', fontWeight: 600 }}>{movie.year}</span>
-            <span style={{ fontSize: '12px', color: '#475569' }}>•</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
+            <span style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 600 }}>{movie.year}</span>
+            <span style={{ fontSize: '11px', color: '#475569' }}>•</span>
             <span style={{
-              fontSize: '11px',
+              fontSize: '10px',
               color: '#fb7185',
               background: 'rgba(244, 63, 94, 0.1)',
-              padding: '2px 8px',
-              borderRadius: '6px',
+              padding: '1px 6px',
+              borderRadius: '4px',
               fontWeight: 600
             }}>
               {movie.genres?.[0] || 'Film'}
             </span>
           </div>
 
-          <h3 className="line-clamp-2" style={{
-            fontSize: '15px',
+          <h3 className="movie-card-title line-clamp-2" style={{
+            fontSize: '14px',
             fontWeight: 700,
             color: '#f8fafc',
             lineHeight: 1.3
@@ -121,9 +119,9 @@ export default function MovieCard({
           </h3>
         </div>
 
-        <div style={{ marginTop: '12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <span style={{ fontSize: '12px', color: '#64748b' }}>{movie.duration || '2s'}</span>
-          <span style={{ fontSize: '12px', color: '#f43f5e', fontWeight: 700 }}>Batafsil →</span>
+        <div style={{ marginTop: '8px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <span style={{ fontSize: '11px', color: '#64748b' }}>{movie.duration || '2s'}</span>
+          <span style={{ fontSize: '11px', color: '#f43f5e', fontWeight: 700 }}>Treyler →</span>
         </div>
       </div>
     </div>

@@ -11,7 +11,6 @@ import { INITIAL_MOVIES } from './data/moviesData';
 import { Film, SlidersHorizontal } from 'lucide-react';
 
 export default function App() {
-  // Authentication
   const [currentUser, setCurrentUser] = useState(() => {
     try {
       const saved = localStorage.getItem('kinohub_current_user');
@@ -29,11 +28,8 @@ export default function App() {
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [isRandomOpen, setIsRandomOpen] = useState(false);
   const [isApiKeyOpen, setIsApiKeyOpen] = useState(false);
-  
-  // Sidebar open/close state (defaults to open on desktop)
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   
-  // TMDB API Key stored in LocalStorage
   const [apiKey, setApiKey] = useState(() => {
     return localStorage.getItem('kinohub_tmdb_key') || '';
   });
@@ -65,7 +61,6 @@ export default function App() {
     setSearchTerm('');
   };
 
-  // Filter and Sort Movies
   const filteredAndSortedMovies = useMemo(() => {
     let result = [...movies];
 
@@ -119,7 +114,7 @@ export default function App() {
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh', background: '#06080d' }}>
-      {/* 1. Left Collapsible Sidebar */}
+      {/* 1. Left Sidebar */}
       <Sidebar
         selectedGenre={selectedGenre}
         onSelectGenre={handleSelectGenre}
@@ -135,7 +130,7 @@ export default function App() {
         onLogout={handleLogout}
       />
 
-      {/* 2. Main Content Right Panel */}
+      {/* 2. Main Right Container */}
       <div style={{
         flex: 1,
         minWidth: 0,
@@ -143,7 +138,6 @@ export default function App() {
         flexDirection: 'column',
         transition: 'all 0.3s ease'
       }}>
-        {/* Top Navbar with Sidebar Toggle */}
         <Navbar
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
@@ -155,7 +149,6 @@ export default function App() {
           onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
         />
 
-        {/* Hero Showcase (shown on Home without active search) */}
         {!searchTerm && selectedGenre === 'Barchasi' && activeFilter === 'all' && (
           <HeroBanner
             featuredMovies={featuredMovies}
@@ -164,15 +157,15 @@ export default function App() {
           />
         )}
 
-        {/* Catalog Content Area */}
-        <main style={{
+        {/* Catalog Main View */}
+        <main className="catalog-main" style={{
           padding: '28px 32px 80px 32px',
           maxWidth: '1440px',
           width: '100%',
           flex: 1
         }}>
-          {/* Catalog Controls Header */}
-          <div style={{
+          {/* Header Controls */}
+          <div className="catalog-header-wrap" style={{
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
@@ -200,12 +193,12 @@ export default function App() {
                 </span>
               </div>
               <p style={{ fontSize: '13px', color: '#64748b', marginTop: '4px' }}>
-                Katalogni ochish/yopish uchun yuqoridagi menyu tugmasini bosing
+                Sidebarni ochish/yopish uchun chapdagi ikonkadan foydalaning
               </p>
             </div>
 
-            {/* Quick Sort Controls */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            {/* Sort Controls */}
+            <div className="catalog-sort-group" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span style={{ fontSize: '12px', color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '4px' }}>
                 <SlidersHorizontal size={14} /> Saralash:
               </span>
@@ -223,7 +216,7 @@ export default function App() {
                   transition: 'all 0.2s'
                 }}
               >
-                Reyting boʻyicha
+                Reyting
               </button>
               <button
                 onClick={() => setSortBy('year')}
@@ -239,12 +232,12 @@ export default function App() {
                   transition: 'all 0.2s'
                 }}
               >
-                Yil boʻyicha
+                Yil
               </button>
             </div>
           </div>
 
-          {/* Movies Grid */}
+          {/* Grid of movies */}
           {filteredAndSortedMovies.length === 0 ? (
             <div className="animate-fade-in" style={{
               textAlign: 'center',
@@ -269,7 +262,7 @@ export default function App() {
               </button>
             </div>
           ) : (
-            <div style={{
+            <div className="catalog-grid" style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
               gap: '22px'
@@ -286,7 +279,7 @@ export default function App() {
         </main>
 
         {/* Footer */}
-        <footer style={{
+        <footer className="footer-container" style={{
           borderTop: '1px solid rgba(255, 255, 255, 0.06)',
           background: '#070a12',
           padding: '24px 32px',
@@ -299,10 +292,10 @@ export default function App() {
           fontSize: '13px'
         }}>
           <div>
-            <span style={{ fontWeight: 700, color: '#e2e8f0' }}>KinoHub</span> — Zamonaviy kino va seriallar platformasi
+            <span style={{ fontWeight: 700, color: '#e2e8f0' }}>KinoHub</span> — Barcha qurilmalarga toʻliq moslashgan platforma
           </div>
           <div style={{ display: 'flex', gap: '16px', color: '#94a3b8' }}>
-            <span>Ochilib-yopiladigan Sidebar</span>
+            <span>Responsive Media</span>
             <span>•</span>
             <span>TMDB API</span>
             <span>•</span>

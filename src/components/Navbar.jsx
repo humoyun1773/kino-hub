@@ -12,7 +12,7 @@ export default function Navbar({
   onToggleSidebar
 }) {
   return (
-    <header className="glass-header" style={{
+    <header className="glass-header navbar-container" style={{
       position: 'sticky',
       top: 0,
       zIndex: 40,
@@ -38,7 +38,8 @@ export default function Navbar({
               alignItems: 'center',
               justifyContent: 'center',
               cursor: 'pointer',
-              transition: 'all 0.2s ease'
+              transition: 'all 0.2s ease',
+              flexShrink: 0
             }}
             title="Katalog panelini ochish"
             onMouseEnter={(e) => {
@@ -75,11 +76,12 @@ export default function Navbar({
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: '0 0 14px rgba(225, 29, 72, 0.5)'
+              boxShadow: '0 0 14px rgba(225, 29, 72, 0.5)',
+              flexShrink: 0
             }}>
               <Film size={18} color="#ffffff" />
             </div>
-            <span className="gradient-title" style={{ fontSize: '20px', fontWeight: 800, letterSpacing: '-0.5px' }}>
+            <span className="gradient-title brand-text-nav" style={{ fontSize: '20px', fontWeight: 800, letterSpacing: '-0.5px' }}>
               KinoHub
             </span>
           </div>
@@ -87,7 +89,7 @@ export default function Navbar({
       )}
 
       {/* Center Search Bar */}
-      <div style={{
+      <div className="navbar-search" style={{
         flex: 1,
         maxWidth: '560px',
         position: 'relative',
@@ -142,20 +144,20 @@ export default function Navbar({
       </div>
 
       {/* Right Action Buttons */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
         <button
           onClick={onOpenRandom}
-          className="btn-secondary"
+          className="btn-secondary nav-action-btn"
           style={{ padding: '9px 16px', fontSize: '13px' }}
           title="Tasodifiy film tanlash"
         >
           <Dices size={16} color="#fb7185" />
-          <span>Tasodifiy</span>
+          <span className="nav-btn-text">Tasodifiy</span>
         </button>
 
         <button
           onClick={onOpenApiKey}
-          className="btn-secondary"
+          className="btn-secondary nav-action-btn"
           style={{
             padding: '9px 12px',
             fontSize: '13px',
