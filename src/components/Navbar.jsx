@@ -22,44 +22,41 @@ export default function Navbar({
       justifyContent: 'space-between',
       gap: '16px'
     }}>
-      {/* Left: Dedicated Sidebar Toggle Button & Dynamic Brand */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-        {/* Dedicated Sidebar Toggle Button */}
-        <button
-          onClick={onToggleSidebar}
-          style={{
-            background: isSidebarOpen ? 'rgba(225, 29, 72, 0.15)' : 'rgba(255, 255, 255, 0.07)',
-            border: isSidebarOpen ? '1px solid rgba(225, 29, 72, 0.4)' : '1px solid rgba(255, 255, 255, 0.12)',
-            borderRadius: '10px',
-            color: isSidebarOpen ? '#f43f5e' : '#e2e8f0',
-            width: '40px',
-            height: '40px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            cursor: 'pointer',
-            transition: 'all 0.2s ease',
-            boxShadow: isSidebarOpen ? '0 0 14px rgba(225, 29, 72, 0.3)' : 'none'
-          }}
-          title={isSidebarOpen ? "Katalog panelini yopish" : "Katalog panelini ochish"}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = 'rgba(225, 29, 72, 0.2)';
-            e.currentTarget.style.borderColor = 'rgba(225, 29, 72, 0.5)';
-            e.currentTarget.style.color = '#f43f5e';
-            e.currentTarget.style.transform = 'scale(1.04)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = isSidebarOpen ? 'rgba(225, 29, 72, 0.15)' : 'rgba(255, 255, 255, 0.07)';
-            e.currentTarget.style.borderColor = isSidebarOpen ? 'rgba(225, 29, 72, 0.4)' : 'rgba(255, 255, 255, 0.12)';
-            e.currentTarget.style.color = isSidebarOpen ? '#f43f5e' : '#e2e8f0';
-            e.currentTarget.style.transform = 'scale(1)';
-          }}
-        >
-          <Sidebar size={20} />
-        </button>
+      {/* Left: Dedicated Sidebar Toggle Button & Brand (shown only when sidebar is closed) */}
+      {!isSidebarOpen && (
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <button
+            onClick={onToggleSidebar}
+            style={{
+              background: 'rgba(255, 255, 255, 0.07)',
+              border: '1px solid rgba(255, 255, 255, 0.12)',
+              borderRadius: '10px',
+              color: '#e2e8f0',
+              width: '40px',
+              height: '40px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease'
+            }}
+            title="Katalog panelini ochish"
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = 'rgba(225, 29, 72, 0.2)';
+              e.currentTarget.style.borderColor = 'rgba(225, 29, 72, 0.5)';
+              e.currentTarget.style.color = '#f43f5e';
+              e.currentTarget.style.transform = 'scale(1.04)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.07)';
+              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.12)';
+              e.currentTarget.style.color = '#e2e8f0';
+              e.currentTarget.style.transform = 'scale(1)';
+            }}
+          >
+            <Sidebar size={20} />
+          </button>
 
-        {/* Brand Logo in Navbar (shows when sidebar is closed to prevent duplication) */}
-        {!isSidebarOpen && (
           <div
             onClick={() => setSearchTerm('')}
             style={{
@@ -86,8 +83,8 @@ export default function Navbar({
               KinoHub
             </span>
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* Center Search Bar */}
       <div style={{

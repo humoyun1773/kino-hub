@@ -16,7 +16,8 @@ import {
   LogOut, 
   X,
   Sparkles,
-  SlidersHorizontal
+  SlidersHorizontal,
+  Sidebar as SidebarIcon
 } from 'lucide-react';
 import { GENRES } from '../data/moviesData';
 
@@ -103,9 +104,10 @@ export default function Sidebar({
         <div style={{ width: '270px', height: '100%', display: 'flex', flexDirection: 'column' }}>
           {/* Sidebar Top Header */}
           <div style={{
-            padding: '18px 20px',
+            padding: '16px 18px',
             display: 'flex',
             alignItems: 'center',
+            justifyContent: 'space-between',
             borderBottom: '1px solid rgba(255, 255, 255, 0.06)'
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -130,6 +132,38 @@ export default function Sidebar({
                 </span>
               </div>
             </div>
+
+            {/* Sidebar toggle button INSIDE Sidebar */}
+            <button
+              onClick={onClose}
+              style={{
+                background: 'rgba(225, 29, 72, 0.15)',
+                border: '1px solid rgba(225, 29, 72, 0.4)',
+                borderRadius: '10px',
+                color: '#f43f5e',
+                width: '38px',
+                height: '38px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+                boxShadow: '0 0 14px rgba(225, 29, 72, 0.3)'
+              }}
+              title="Katalogni yopish"
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'rgba(225, 29, 72, 0.25)';
+                e.currentTarget.style.borderColor = 'rgba(225, 29, 72, 0.6)';
+                e.currentTarget.style.transform = 'scale(1.05)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'rgba(225, 29, 72, 0.15)';
+                e.currentTarget.style.borderColor = 'rgba(225, 29, 72, 0.4)';
+                e.currentTarget.style.transform = 'scale(1)';
+              }}
+            >
+              <SidebarIcon size={20} />
+            </button>
           </div>
 
           {/* Navigation Scrollable Body */}
