@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { X, KeyRound, CheckCircle2, ExternalLink, ShieldCheck } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { X, KeyRound, CheckCircle2, ExternalLink } from 'lucide-react';
 
 export default function ApiKeyModal({
   apiKey,
@@ -8,6 +8,14 @@ export default function ApiKeyModal({
 }) {
   const [inputKey, setInputKey] = useState(apiKey || '');
   const [statusMsg, setStatusMsg] = useState('');
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
 
   const handleSave = () => {
     onSaveApiKey(inputKey.trim());
@@ -18,7 +26,7 @@ export default function ApiKeyModal({
   };
 
   return (
-    <div style={{
+    <div className="animate-fade-in" style={{
       position: 'fixed',
       inset: 0,
       zIndex: 50,
@@ -31,7 +39,7 @@ export default function ApiKeyModal({
     }}
     onClick={onClose}
     >
-      <div style={{
+      <div className="modal-box animate-scale-up" style={{
         background: '#0e131f',
         borderRadius: '24px',
         border: '1px solid rgba(255, 255, 255, 0.1)',

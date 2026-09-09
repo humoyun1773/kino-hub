@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Dices, Play, Star, RefreshCw } from 'lucide-react';
 
 export default function RandomMovieModal({
@@ -11,6 +11,14 @@ export default function RandomMovieModal({
   });
   const [isSpinning, setIsSpinning] = useState(false);
 
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
+
   const handleShuffle = () => {
     setIsSpinning(true);
     let count = 0;
@@ -21,13 +29,13 @@ export default function RandomMovieModal({
         clearInterval(interval);
         setIsSpinning(false);
       }
-    }, 90);
+    }, 85);
   };
 
   if (!selectedMovie) return null;
 
   return (
-    <div style={{
+    <div className="animate-fade-in" style={{
       position: 'fixed',
       inset: 0,
       zIndex: 50,
@@ -40,7 +48,7 @@ export default function RandomMovieModal({
     }}
     onClick={onClose}
     >
-      <div style={{
+      <div className="modal-box animate-scale-up" style={{
         background: '#0e131f',
         borderRadius: '24px',
         border: '1px solid rgba(244, 63, 94, 0.3)',
@@ -82,23 +90,23 @@ export default function RandomMovieModal({
           <Dices size={28} color="#fff" />
         </div>
 
-        <h3 style={{ fontSize: '22px', fontWeight: 800, color: '#fff', marginBottom: '6px' }}>
+        <h3 className="modal-title" style={{ fontSize: '22px', fontWeight: 800, color: '#fff', marginBottom: '6px' }}>
           Tasodifiy Film Tanlovi
         </h3>
-        <p style={{ color: '#94a3b8', fontSize: '14px', marginBottom: '24px' }}>
+        <p style={{ color: '#94a3b8', fontSize: '13px', marginBottom: '22px' }}>
           Kechqurun nima koʻrishni bilmayapsizmi? Algoritmimiz sizga eng mos durdona film tanlab beradi!
         </p>
 
         {/* Selected Movie Display */}
         <div style={{
           display: 'flex',
-          gap: '18px',
+          gap: '16px',
           textAlign: 'left',
           background: 'rgba(255, 255, 255, 0.04)',
           border: '1px solid rgba(255, 255, 255, 0.08)',
           borderRadius: '16px',
-          padding: '16px',
-          marginBottom: '24px',
+          padding: '14px',
+          marginBottom: '22px',
           alignItems: 'center',
           transition: 'all 0.2s ease'
         }}>
@@ -106,7 +114,7 @@ export default function RandomMovieModal({
             src={selectedMovie.poster}
             alt={selectedMovie.title}
             style={{
-              width: '90px',
+              width: '84px',
               aspectRatio: '2/3',
               borderRadius: '10px',
               objectFit: 'cover'
@@ -119,24 +127,24 @@ export default function RandomMovieModal({
               </span>
               <span style={{ color: '#64748b', fontSize: '12px' }}>• {selectedMovie.year}</span>
             </div>
-            <h4 style={{ fontSize: '17px', fontWeight: 700, color: '#fff', marginBottom: '6px' }}>
+            <h4 style={{ fontSize: '16px', fontWeight: 700, color: '#fff', marginBottom: '6px' }}>
               {selectedMovie.title}
             </h4>
-            <p className="line-clamp-2" style={{ fontSize: '13px', color: '#94a3b8', lineHeight: 1.4 }}>
+            <p className="line-clamp-2" style={{ fontSize: '12px', color: '#94a3b8', lineHeight: 1.4 }}>
               {selectedMovie.overview}
             </p>
           </div>
         </div>
 
         {/* Action Buttons */}
-        <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
+        <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
           <button
             onClick={handleShuffle}
             disabled={isSpinning}
             className="btn-secondary"
-            style={{ padding: '12px 20px', fontSize: '14px' }}
+            style={{ padding: '12px 18px', fontSize: '13px' }}
           >
-            <RefreshCw size={16} className={isSpinning ? "spin-animation" : ""} />
+            <RefreshCw size={15} className={isSpinning ? "spin-animation" : ""} />
             <span>Boshqa film tanlash</span>
           </button>
 
@@ -146,9 +154,9 @@ export default function RandomMovieModal({
               onClose();
             }}
             className="btn-primary"
-            style={{ padding: '12px 24px', fontSize: '14px' }}
+            style={{ padding: '12px 22px', fontSize: '13px' }}
           >
-            <Play size={16} fill="#fff" />
+            <Play size={15} fill="#fff" />
             <span>Koʻrish va Treyler</span>
           </button>
         </div>
