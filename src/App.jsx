@@ -8,7 +8,7 @@ import RandomMovieModal from './components/RandomMovieModal';
 import ApiKeyModal from './components/ApiKeyModal';
 import AuthPage from './components/AuthPage';
 import { INITIAL_MOVIES } from './data/moviesData';
-import { Film, Flame, Star, Sparkles, Layers, SlidersHorizontal } from 'lucide-react';
+import { Film, SlidersHorizontal } from 'lucide-react';
 
 export default function App() {
   // Authentication
@@ -23,13 +23,15 @@ export default function App() {
 
   const [movies] = useState(INITIAL_MOVIES);
   const [selectedGenre, setSelectedGenre] = useState('Barchasi');
-  const [activeFilter, setActiveFilter] = useState('all'); // 'all', 'trending', 'top-rated', 'new'
-  const [sortBy, setSortBy] = useState('rating'); // 'rating', 'year'
+  const [activeFilter, setActiveFilter] = useState('all');
+  const [sortBy, setSortBy] = useState('rating');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [isRandomOpen, setIsRandomOpen] = useState(false);
   const [isApiKeyOpen, setIsApiKeyOpen] = useState(false);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  
+  // Sidebar open/close state (defaults to open on desktop)
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   
   // TMDB API Key stored in LocalStorage
   const [apiKey, setApiKey] = useState(() => {
@@ -51,14 +53,12 @@ export default function App() {
     localStorage.setItem('kinohub_tmdb_key', key);
   };
 
-  // Genre selection also resets quick filter to all
   const handleSelectGenre = (genre) => {
     setSelectedGenre(genre);
     setActiveFilter('all');
     setSearchTerm('');
   };
 
-  // Quick filter selection
   const handleSelectFilter = (filterId) => {
     setActiveFilter(filterId);
     setSelectedGenre('Barchasi');
@@ -69,7 +69,6 @@ export default function App() {
   const filteredAndSortedMovies = useMemo(() => {
     let result = [...movies];
 
-    // 1. Search filter
     if (searchTerm.trim()) {
       const q = searchTerm.toLowerCase();
       result = result.filter((m) =>
@@ -79,12 +78,10 @@ export default function App() {
         m.cast?.some((c) => c.toLowerCase().includes(q))
       );
     } else {
-      // 2. Genre filter
       if (selectedGenre !== 'Barchasi') {
         result = result.filter((m) => m.genres?.includes(selectedGenre));
       }
 
-      // 3. Quick filter
       if (activeFilter === 'trending') {
         result = result.filter((m) => m.featured || m.rating >= 8.7);
       } else if (activeFilter === 'top-rated') {
@@ -94,7 +91,6 @@ export default function App() {
       }
     }
 
-    // 4. Sorting
     if (sortBy === 'rating') {
       result.sort((a, b) => b.rating - a.rating);
     } else if (sortBy === 'year') {
@@ -108,12 +104,10 @@ export default function App() {
     return movies.filter((m) => m.featured);
   }, [movies]);
 
-  // If not logged in, show Auth Screen
   if (!currentUser) {
     return <AuthPage onLoginSuccess={handleLoginSuccess} />;
   }
 
-  // Get current catalog section title
   const getCatalogTitle = () => {
     if (searchTerm) return `"${searchTerm}" boʻyicha qidiruv natijalari`;
     if (selectedGenre !== 'Barchasi') return `${selectedGenre} Filmlari`;
@@ -125,7 +119,7 @@ export default function App() {
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh', background: '#06080d' }}>
-      {/* 1. Left Fixed Sidebar */}
+      {/* 1. Left Collapsible Sidebar */}
       <Sidebar
         selectedGenre={selectedGenre}
         onSelectGenre={handleSelectGenre}
@@ -142,8 +136,14 @@ export default function App() {
       />
 
       {/* 2. Main Content Right Panel */}
-      <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column' }}>
-        {/* Top Navbar */}
+      <div style={{
+        flex: 1,
+        minWidth: 0,
+        display: 'flex',
+        flexDirection: 'column',
+        transition: 'all 0.3s ease'
+      }}>
+        {/* Top Navbar with Sidebar Toggle */}
         <Navbar
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
@@ -151,10 +151,11 @@ export default function App() {
           onOpenApiKey={() => setIsApiKeyOpen(true)}
           hasApiKey={Boolean(apiKey)}
           currentUser={currentUser}
+          isSidebarOpen={isSidebarOpen}
           onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
         />
 
-        {/* Hero Showcase (only shown when on all/home without search) */}
+        {/* Hero Showcase (shown on Home without active search) */}
         {!searchTerm && selectedGenre === 'Barchasi' && activeFilter === 'all' && (
           <HeroBanner
             featuredMovies={featuredMovies}
@@ -163,14 +164,14 @@ export default function App() {
           />
         )}
 
-        {/* Catalog Main View */}
+        {/* Catalog Content Area */}
         <main style={{
           padding: '28px 32px 80px 32px',
           maxWidth: '1440px',
           width: '100%',
           flex: 1
         }}>
-          {/* Catalog Header Info & Controls */}
+          {/* Catalog Controls Header */}
           <div style={{
             display: 'flex',
             justifyContent: 'space-between',
@@ -199,11 +200,11 @@ export default function App() {
                 </span>
               </div>
               <p style={{ fontSize: '13px', color: '#64748b', marginTop: '4px' }}>
-                Chapdagi sidebar orqali janrlar va filtrlarni tezkor boshqaring
+                Katalogni ochish/yopish uchun yuqoridagi menyu tugmasini bosing
               </p>
             </div>
 
-            {/* Quick Sort Pill buttons */}
+            {/* Quick Sort Controls */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span style={{ fontSize: '12px', color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '4px' }}>
                 <SlidersHorizontal size={14} /> Saralash:
@@ -257,14 +258,14 @@ export default function App() {
                 Hech qanday film topilmadi
               </h3>
               <p style={{ color: '#64748b', fontSize: '14px', marginBottom: '20px' }}>
-                Sidebar orqali "Barchasi"ni tanlang yoki qidiruv soʻzini tozalang.
+                Qidiruv soʻzini oʻzgartirib koʻring yoki boshqa janrni tanlang.
               </p>
               <button
                 onClick={() => { setSelectedGenre('Barchasi'); setActiveFilter('all'); setSearchTerm(''); }}
                 className="btn-primary"
                 style={{ padding: '10px 22px', fontSize: '14px' }}
               >
-                Barcha filmlarni ochish
+                Barcha filmlarni koʻrsatish
               </button>
             </div>
           ) : (
@@ -301,7 +302,7 @@ export default function App() {
             <span style={{ fontWeight: 700, color: '#e2e8f0' }}>KinoHub</span> — Zamonaviy kino va seriallar platformasi
           </div>
           <div style={{ display: 'flex', gap: '16px', color: '#94a3b8' }}>
-            <span>Sidebar Katalog</span>
+            <span>Ochilib-yopiladigan Sidebar</span>
             <span>•</span>
             <span>TMDB API</span>
             <span>•</span>

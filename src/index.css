@@ -23,11 +23,6 @@ body {
   to { opacity: 1; transform: scale(1); }
 }
 
-@keyframes floatSlow {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-6px); }
-}
-
 .animate-fade-in {
   animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
@@ -36,11 +31,7 @@ body {
   animation: scaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.animate-float {
-  animation: floatSlow 4s ease-in-out infinite;
-}
-
-/* Custom Scrollbar */
+/* Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -58,17 +49,10 @@ body {
 
 /* Header & Glass */
 .glass-header {
-  background: rgba(9, 13, 22, 0.88);
+  background: rgba(9, 13, 22, 0.9);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-}
-
-.glass-card {
-  background: rgba(15, 20, 32, 0.8);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .gradient-title {
@@ -94,9 +78,6 @@ body {
   background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);
   box-shadow: 0 8px 24px -4px rgba(225, 29, 72, 0.55);
   transform: translateY(-2px);
-}
-.btn-primary:active {
-  transform: translateY(0);
 }
 
 .btn-secondary {
@@ -161,35 +142,26 @@ body {
   overflow: hidden;
 }
 
-/* Responsive Sidebar Rules */
+/* Collapsible Sidebar Styles */
 @media (max-width: 1024px) {
-  .sidebar-responsive {
+  .collapsible-sidebar {
     position: fixed !important;
     left: 0;
     top: 0;
     bottom: 0;
+    z-index: 50 !important;
+  }
+  .collapsible-sidebar.is-closed {
     transform: translateX(-100%);
-    box-shadow: 20px 0 50px rgba(0, 0, 0, 0.8);
   }
-  .sidebar-open {
-    transform: translateX(0) !important;
-  }
-  .mobile-close-btn {
-    display: block !important;
-  }
-  .mobile-brand {
-    display: flex !important;
-  }
-  .hide-on-mobile {
-    display: none;
+  .collapsible-sidebar.is-open {
+    transform: translateX(0);
+    box-shadow: 20px 0 60px rgba(0, 0, 0, 0.9);
   }
 }
 
 @media (min-width: 1025px) {
-  .mobile-menu-btn {
-    display: none !important;
-  }
-  .lg-hidden {
+  .sidebar-backdrop {
     display: none !important;
   }
 }

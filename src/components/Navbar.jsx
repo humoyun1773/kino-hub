@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search, Dices, KeyRound, X, Menu, Film } from 'lucide-react';
+import { Search, Dices, KeyRound, X, Menu, Film, PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 
 export default function Navbar({
   searchTerm,
@@ -8,6 +8,7 @@ export default function Navbar({
   onOpenApiKey,
   hasApiKey,
   currentUser,
+  isSidebarOpen,
   onToggleSidebar
 }) {
   return (
@@ -21,31 +22,56 @@ export default function Navbar({
       justifyContent: 'space-between',
       gap: '16px'
     }}>
-      {/* Mobile Toggle Button & Brand (mobile only) */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+      {/* Left: Toggle Button & Logo */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+        {/* Toggle Sidebar Button (Visible on ALL devices) */}
         <button
           onClick={onToggleSidebar}
           style={{
-            background: 'rgba(255, 255, 255, 0.08)',
-            border: '1px solid rgba(255, 255, 255, 0.12)',
+            background: isSidebarOpen ? 'rgba(225, 29, 72, 0.15)' : 'rgba(255, 255, 255, 0.08)',
+            border: isSidebarOpen ? '1px solid rgba(225, 29, 72, 0.4)' : '1px solid rgba(255, 255, 255, 0.14)',
             borderRadius: '10px',
-            color: '#fff',
-            width: '38px',
-            height: '38px',
+            color: isSidebarOpen ? '#f43f5e' : '#fff',
+            width: '40px',
+            height: '40px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            cursor: 'pointer'
+            cursor: 'pointer',
+            transition: 'all 0.25s ease',
+            boxShadow: isSidebarOpen ? '0 0 12px rgba(225, 29, 72, 0.3)' : 'none'
           }}
-          className="mobile-menu-btn"
-          title="Katalog menyusini ochish"
+          title={isSidebarOpen ? "Katalogni yopish" : "Katalogni ochish"}
         >
-          <Menu size={20} />
+          {isSidebarOpen ? <PanelLeftClose size={20} /> : <PanelLeftOpen size={20} />}
         </button>
 
-        <div className="mobile-brand" style={{ display: 'none', alignItems: 'center', gap: '8px' }}>
-          <Film size={22} color="#f43f5e" />
-          <span className="gradient-title" style={{ fontSize: '18px', fontWeight: 800 }}>KinoHub</span>
+        {/* Brand Logo in Navbar */}
+        <div
+          onClick={() => setSearchTerm('')}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '9px',
+            cursor: 'pointer',
+            userSelect: 'none'
+          }}
+        >
+          <div style={{
+            width: '34px',
+            height: '34px',
+            borderRadius: '10px',
+            background: 'linear-gradient(135deg, #e11d48, #be123c)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            boxShadow: '0 0 14px rgba(225, 29, 72, 0.5)'
+          }}>
+            <Film size={18} color="#ffffff" />
+          </div>
+          <span className="gradient-title" style={{ fontSize: '20px', fontWeight: 800, letterSpacing: '-0.5px' }}>
+            KinoHub
+          </span>
         </div>
       </div>
 
@@ -104,23 +130,23 @@ export default function Navbar({
         )}
       </div>
 
-      {/* Right Actions */}
+      {/* Right Action Buttons */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
         <button
           onClick={onOpenRandom}
           className="btn-secondary"
-          style={{ padding: '8px 14px', fontSize: '13px' }}
+          style={{ padding: '9px 16px', fontSize: '13px' }}
           title="Tasodifiy film tanlash"
         >
           <Dices size={16} color="#fb7185" />
-          <span className="hide-on-mobile">Tasodifiy</span>
+          <span>Tasodifiy</span>
         </button>
 
         <button
           onClick={onOpenApiKey}
           className="btn-secondary"
           style={{
-            padding: '8px 12px',
+            padding: '9px 12px',
             fontSize: '13px',
             border: hasApiKey ? '1px solid rgba(34, 197, 94, 0.4)' : undefined
           }}
