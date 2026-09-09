@@ -14,12 +14,12 @@ import {
   Ghost, 
   Layers, 
   LogOut, 
-  X,
   Sparkles,
   SlidersHorizontal,
+  Compass,
   Sidebar as SidebarIcon
 } from 'lucide-react';
-import { GENRES } from '../data/moviesData';
+import { TMDB_GENRES } from '../services/tmdbApi';
 
 const GENRE_ICONS = {
   'Barchasi': Layers,
@@ -29,37 +29,30 @@ const GENRE_ICONS = {
   'Komediya': Laugh,
   'Multfilm': Smile,
   'Dahshat': Ghost,
+  'Triller': Compass,
+  'Sarguzasht': Compass,
+  'Jinoyat': Swords,
+  'Fantaziya': Rocket
 };
 
 export default function Sidebar({
-  selectedGenre,
+  selectedGenreId,
   onSelectGenre,
   activeFilter,
   onSelectFilter,
   sortBy,
   onSortChange,
-  movies,
   onOpenRandom,
   isOpen,
   onClose,
   currentUser,
   onLogout
 }) {
-  const genreCounts = React.useMemo(() => {
-    const counts = { 'Barchasi': movies.length };
-    GENRES.forEach((g) => {
-      if (g !== 'Barchasi') {
-        counts[g] = movies.filter((m) => m.genres?.includes(g)).length;
-      }
-    });
-    return counts;
-  }, [movies]);
-
   const quickFilters = [
     { id: 'all', label: 'Barcha filmlar', icon: Home },
     { id: 'trending', label: 'Trenddagi premyeralar', icon: Flame, badge: 'Xit' },
-    { id: 'top-rated', label: 'Top Reyting (8.5+)', icon: Star, badge: '8.5+' },
-    { id: 'new', label: '2024 Yilgi yangiliklar', icon: Clock, badge: '2024' },
+    { id: 'top-rated', label: 'Top Reyting (8.0+)', icon: Star, badge: '8.0+' },
+    { id: 'new', label: 'Yangi Premyeralar', icon: Clock, badge: '2024' },
   ];
 
   return (
@@ -128,7 +121,7 @@ export default function Sidebar({
                   KinoHub
                 </span>
                 <span style={{ fontSize: '10px', display: 'block', color: '#64748b', marginTop: '-3px', fontWeight: 600 }}>
-                  KINO PLATFORMASI
+                  JONLI KINO PORTALI
                 </span>
               </div>
             </div>
@@ -243,7 +236,7 @@ export default function Sidebar({
               </div>
             </div>
 
-            {/* Section 2: Janrlar Katalogi */}
+            {/* Section 2: Real TMDB Genres */}
             <div>
               <div style={{
                 fontSize: '11px',
@@ -257,18 +250,17 @@ export default function Sidebar({
                 justifyContent: 'space-between'
               }}>
                 <span>Janrlar</span>
-                <span style={{ fontSize: '10px', color: '#475569' }}>{GENRES.length} ta</span>
+                <span style={{ fontSize: '10px', color: '#475569' }}>TMDB</span>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
-                {GENRES.map((genre) => {
-                  const Icon = GENRE_ICONS[genre] || Layers;
-                  const isSelected = selectedGenre === genre;
-                  const count = genreCounts[genre] || 0;
+                {TMDB_GENRES.map((genre) => {
+                  const Icon = GENRE_ICONS[genre.name] || Layers;
+                  const isSelected = selectedGenreId === genre.id;
                   return (
                     <button
-                      key={genre}
+                      key={genre.id}
                       onClick={() => {
-                        onSelectGenre(genre);
+                        onSelectGenre(genre.id, genre.name);
                         if (window.innerWidth < 1024) onClose();
                       }}
                       style={{
@@ -296,15 +288,8 @@ export default function Sidebar({
                     >
                       <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                         <Icon size={16} color={isSelected ? '#fff' : '#94a3b8'} />
-                        <span>{genre}</span>
+                        <span>{genre.name}</span>
                       </div>
-                      <span style={{
-                        fontSize: '11px',
-                        color: isSelected ? 'rgba(255, 255, 255, 0.9)' : '#64748b',
-                        fontWeight: 600
-                      }}>
-                        {count}
-                      </span>
                     </button>
                   );
                 })}
@@ -368,7 +353,7 @@ export default function Sidebar({
               </div>
             </div>
 
-            {/* Quick Random Movie */}
+            {/* Quick Random Movie Trigger */}
             <div style={{
               background: 'linear-gradient(135deg, rgba(225, 29, 72, 0.15) 0%, rgba(190, 18, 60, 0.05) 100%)',
               border: '1px solid rgba(225, 29, 72, 0.3)',
@@ -380,7 +365,7 @@ export default function Sidebar({
                 <Dices size={16} /> Tasodifiy film
               </div>
               <p style={{ fontSize: '11px', color: '#94a3b8', marginBottom: '10px' }}>
-                Kechqurun koʻrish uchun mos film
+                Jonli filmlardan mosini tanlash
               </p>
               <button
                 onClick={onOpenRandom}

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
 import HeroBanner from './components/HeroBanner';
@@ -7,8 +7,15 @@ import MovieModal from './components/MovieModal';
 import RandomMovieModal from './components/RandomMovieModal';
 import ApiKeyModal from './components/ApiKeyModal';
 import AuthPage from './components/AuthPage';
-import { INITIAL_MOVIES } from './data/moviesData';
-import { Film, SlidersHorizontal } from 'lucide-react';
+import { 
+  fetchTrendingMovies, 
+  fetchPopularMovies, 
+  fetchTopRatedMovies, 
+  fetchUpcomingMovies, 
+  fetchMoviesByGenre, 
+  searchMoviesApi 
+} from './services/tmdbApi';
+import { Film, SlidersHorizontal, Loader2, RefreshCw } from 'lucide-react';
 
 export default function App() {
   const [currentUser, setCurrentUser] = useState(() => {
@@ -20,9 +27,15 @@ export default function App() {
     }
   });
 
-  const [movies] = useState(INITIAL_MOVIES);
-  const [selectedGenre, setSelectedGenre] = useState('Barchasi');
-  const [activeFilter, setActiveFilter] = useState('all');
+  // Movie lists from live API
+  const [movies, setMovies] = useState([]);
+  const [featuredMovies, setFeaturedMovies] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  const [selectedGenreId, setSelectedGenreId] = useState('all');
+  const [selectedGenreName, setSelectedGenreName] = useState('Barchasi');
+  const [activeFilter, setActiveFilter] = useState('all'); // 'all', 'trending', 'top-rated', 'new'
   const [sortBy, setSortBy] = useState('rating');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedMovie, setSelectedMovie] = useState(null);
@@ -33,6 +46,87 @@ export default function App() {
   const [apiKey, setApiKey] = useState(() => {
     return localStorage.getItem('kinohub_tmdb_key') || '';
   });
+
+  // 1. Initial Load: Fetch Trending & Popular Movies
+  const loadInitialData = async () => {
+    setLoading(true);
+    setError('');
+    try {
+      const [trending, popular] = await Promise.all([
+        fetchTrendingMovies(),
+        fetchPopularMovies(1)
+      ]);
+      setFeaturedMovies(trending);
+      setMovies(popular);
+    } catch (err) {
+      console.error(err);
+      setError('Filmlarni API orqali yuklashda muammo yuz berdi. Iltimos qayta urinib koʻring.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadInitialData();
+  }, [apiKey]);
+
+  // 2. Fetch movies when filter or genre changes
+  const loadFilteredMovies = async () => {
+    if (searchTerm.trim()) return; // Search handles its own
+
+    setLoading(true);
+    setError('');
+    try {
+      let data = [];
+      if (selectedGenreId !== 'all') {
+        data = await fetchMoviesByGenre(selectedGenreId);
+      } else if (activeFilter === 'trending') {
+        data = await fetchTrendingMovies();
+      } else if (activeFilter === 'top-rated') {
+        data = await fetchTopRatedMovies();
+      } else if (activeFilter === 'new') {
+        data = await fetchUpcomingMovies();
+      } else {
+        data = await fetchPopularMovies();
+      }
+      setMovies(data);
+    } catch (err) {
+      console.error(err);
+      setError('Maʼlumotlarni yuklab boʻlmadi.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!searchTerm.trim()) {
+      loadFilteredMovies();
+    }
+  }, [selectedGenreId, activeFilter]);
+
+  // 3. Search with Debounce
+  useEffect(() => {
+    if (!searchTerm.trim()) {
+      loadFilteredMovies();
+      return;
+    }
+
+    const timer = setTimeout(async () => {
+      setLoading(true);
+      setError('');
+      try {
+        const results = await searchMoviesApi(searchTerm.trim());
+        setMovies(results);
+      } catch (err) {
+        console.error(err);
+        setError('Qidiruvda xatolik yuz berdi.');
+      } finally {
+        setLoading(false);
+      }
+    }, 450);
+
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
 
   const handleLoginSuccess = (user) => {
     setCurrentUser(user);
@@ -47,82 +141,57 @@ export default function App() {
   const handleSaveApiKey = (key) => {
     setApiKey(key);
     localStorage.setItem('kinohub_tmdb_key', key);
+    loadInitialData();
   };
 
-  const handleSelectGenre = (genre) => {
-    setSelectedGenre(genre);
+  const handleSelectGenre = (genreId, genreName) => {
+    setSelectedGenreId(genreId);
+    setSelectedGenreName(genreName);
     setActiveFilter('all');
     setSearchTerm('');
   };
 
   const handleSelectFilter = (filterId) => {
     setActiveFilter(filterId);
-    setSelectedGenre('Barchasi');
+    setSelectedGenreId('all');
+    setSelectedGenreName('Barchasi');
     setSearchTerm('');
   };
 
-  const filteredAndSortedMovies = useMemo(() => {
-    let result = [...movies];
-
-    if (searchTerm.trim()) {
-      const q = searchTerm.toLowerCase();
-      result = result.filter((m) =>
-        m.title.toLowerCase().includes(q) ||
-        m.overview?.toLowerCase().includes(q) ||
-        m.director?.toLowerCase().includes(q) ||
-        m.cast?.some((c) => c.toLowerCase().includes(q))
-      );
-    } else {
-      if (selectedGenre !== 'Barchasi') {
-        result = result.filter((m) => m.genres?.includes(selectedGenre));
-      }
-
-      if (activeFilter === 'trending') {
-        result = result.filter((m) => m.featured || m.rating >= 8.7);
-      } else if (activeFilter === 'top-rated') {
-        result = result.filter((m) => m.rating >= 8.5);
-      } else if (activeFilter === 'new') {
-        result = result.filter((m) => m.year >= 2024);
-      }
-    }
-
+  // Sort Movies
+  const sortedMovies = useMemo(() => {
+    const list = [...movies];
     if (sortBy === 'rating') {
-      result.sort((a, b) => b.rating - a.rating);
+      list.sort((a, b) => b.rating - a.rating);
     } else if (sortBy === 'year') {
-      result.sort((a, b) => b.year - a.year);
+      list.sort((a, b) => Number(b.year) - Number(a.year));
     }
-
-    return result;
-  }, [movies, selectedGenre, activeFilter, searchTerm, sortBy]);
-
-  const featuredMovies = useMemo(() => {
-    return movies.filter((m) => m.featured);
-  }, [movies]);
+    return list;
+  }, [movies, sortBy]);
 
   if (!currentUser) {
     return <AuthPage onLoginSuccess={handleLoginSuccess} />;
   }
 
   const getCatalogTitle = () => {
-    if (searchTerm) return `"${searchTerm}" boʻyicha qidiruv natijalari`;
-    if (selectedGenre !== 'Barchasi') return `${selectedGenre} Filmlari`;
-    if (activeFilter === 'trending') return '🔥 Trenddagi Ommabop Filmlar';
-    if (activeFilter === 'top-rated') return '⭐ Eng Yuqori Reytingli Filmlar (IMDb 8.5+)';
-    if (activeFilter === 'new') return '🕒 2024 Yilgi Yangi Premyeralar';
-    return 'Barcha Kinolar Katalogi';
+    if (searchTerm) return `"${searchTerm}" boʻyicha jonli qidiruv`;
+    if (selectedGenreId !== 'all') return `${selectedGenreName} filmlari (Jonli API)`;
+    if (activeFilter === 'trending') return '🔥 Trenddagi Premyeralar (TMDB)';
+    if (activeFilter === 'top-rated') return '⭐ Eng Yuqori Reytingli Filmlar';
+    if (activeFilter === 'new') return '🕒 Yangi Premyeralar';
+    return 'Jonli Kinolar Katalogi (TMDB API)';
   };
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh', background: '#06080d' }}>
       {/* 1. Left Sidebar */}
       <Sidebar
-        selectedGenre={selectedGenre}
+        selectedGenreId={selectedGenreId}
         onSelectGenre={handleSelectGenre}
         activeFilter={activeFilter}
         onSelectFilter={handleSelectFilter}
         sortBy={sortBy}
         onSortChange={setSortBy}
-        movies={movies}
         onOpenRandom={() => setIsRandomOpen(true)}
         isOpen={isSidebarOpen}
         onClose={() => setIsSidebarOpen(false)}
@@ -149,7 +218,8 @@ export default function App() {
           onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
         />
 
-        {!searchTerm && selectedGenre === 'Barchasi' && activeFilter === 'all' && (
+        {/* Hero Showcase (shown on Home without active search) */}
+        {!searchTerm && selectedGenreId === 'all' && activeFilter === 'all' && featuredMovies.length > 0 && (
           <HeroBanner
             featuredMovies={featuredMovies}
             onSelectMovie={setSelectedMovie}
@@ -157,7 +227,7 @@ export default function App() {
           />
         )}
 
-        {/* Catalog Main View */}
+        {/* Catalog Content Area */}
         <main className="catalog-main" style={{
           padding: '28px 32px 80px 32px',
           maxWidth: '1440px',
@@ -189,11 +259,11 @@ export default function App() {
                   padding: '3px 10px',
                   borderRadius: '9999px'
                 }}>
-                  {filteredAndSortedMovies.length} ta film
+                  {sortedMovies.length} ta film
                 </span>
               </div>
               <p style={{ fontSize: '13px', color: '#64748b', marginTop: '4px' }}>
-                Sidebarni ochish/yopish uchun chapdagi ikonkadan foydalaning
+                Barcha maʼlumotlar toʻgʻridan-toʻgʻri real TMDB API orqali kelmoqda
               </p>
             </div>
 
@@ -237,8 +307,46 @@ export default function App() {
             </div>
           </div>
 
-          {/* Grid of movies */}
-          {filteredAndSortedMovies.length === 0 ? (
+          {/* Loading Indicator */}
+          {loading && (
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '60px 20px',
+              gap: '12px'
+            }}>
+              <Loader2 size={36} color="#f43f5e" className="spin-animation" />
+              <span style={{ color: '#94a3b8', fontSize: '14px', fontWeight: 600 }}>
+                Filmlar API dan yuklanmoqda...
+              </span>
+            </div>
+          )}
+
+          {/* Error Message */}
+          {!loading && error && (
+            <div style={{
+              textAlign: 'center',
+              padding: '50px 20px',
+              background: 'rgba(239, 68, 68, 0.1)',
+              borderRadius: '16px',
+              border: '1px solid rgba(239, 68, 68, 0.25)',
+              color: '#f87171'
+            }}>
+              <p style={{ fontSize: '15px', fontWeight: 600, marginBottom: '14px' }}>{error}</p>
+              <button
+                onClick={loadFilteredMovies}
+                className="btn-primary"
+                style={{ padding: '10px 20px', fontSize: '13px' }}
+              >
+                <RefreshCw size={15} /> Qayta yuklash
+              </button>
+            </div>
+          )}
+
+          {/* Empty State */}
+          {!loading && !error && sortedMovies.length === 0 && (
             <div className="animate-fade-in" style={{
               textAlign: 'center',
               padding: '80px 20px',
@@ -248,26 +356,29 @@ export default function App() {
             }}>
               <Film size={48} color="#475569" style={{ marginBottom: '12px' }} />
               <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#94a3b8', marginBottom: '6px' }}>
-                Hech qanday film topilmadi
+                Film topilmadi
               </h3>
               <p style={{ color: '#64748b', fontSize: '14px', marginBottom: '20px' }}>
                 Qidiruv soʻzini oʻzgartirib koʻring yoki boshqa janrni tanlang.
               </p>
               <button
-                onClick={() => { setSelectedGenre('Barchasi'); setActiveFilter('all'); setSearchTerm(''); }}
+                onClick={() => { setSelectedGenreId('all'); setSelectedGenreName('Barchasi'); setSearchTerm(''); }}
                 className="btn-primary"
                 style={{ padding: '10px 22px', fontSize: '14px' }}
               >
                 Barcha filmlarni koʻrsatish
               </button>
             </div>
-          ) : (
+          )}
+
+          {/* Real Live Grid of Movies */}
+          {!loading && !error && sortedMovies.length > 0 && (
             <div className="catalog-grid" style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
               gap: '22px'
             }}>
-              {filteredAndSortedMovies.map((movie) => (
+              {sortedMovies.map((movie) => (
                 <MovieCard
                   key={movie.id}
                   movie={movie}
@@ -292,10 +403,10 @@ export default function App() {
           fontSize: '13px'
         }}>
           <div>
-            <span style={{ fontWeight: 700, color: '#e2e8f0' }}>KinoHub</span> — Barcha qurilmalarga toʻliq moslashgan platforma
+            <span style={{ fontWeight: 700, color: '#e2e8f0' }}>KinoHub</span> — 100% TMDB API & Jonli Kino Serverlari
           </div>
           <div style={{ display: 'flex', gap: '16px', color: '#94a3b8' }}>
-            <span>Responsive Media</span>
+            <span>Live Stream Servers</span>
             <span>•</span>
             <span>TMDB API</span>
             <span>•</span>
@@ -316,7 +427,7 @@ export default function App() {
 
       {isRandomOpen && (
         <RandomMovieModal
-          movies={movies}
+          movies={movies.length > 0 ? movies : featuredMovies}
           onClose={() => setIsRandomOpen(false)}
           onSelectMovie={setSelectedMovie}
         />

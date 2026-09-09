@@ -9,15 +9,15 @@ export default function HeroBanner({
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
-    if (featuredMovies.length <= 1) return;
+    if (!featuredMovies || featuredMovies.length <= 1) return;
     const timer = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % featuredMovies.length);
-    }, 8000);
+    }, 7000);
     return () => clearInterval(timer);
-  }, [featuredMovies.length]);
+  }, [featuredMovies]);
 
-  if (!featuredMovies.length) return null;
-  const movie = featuredMovies[currentIndex];
+  if (!featuredMovies || !featuredMovies.length) return null;
+  const movie = featuredMovies[currentIndex] || featuredMovies[0];
 
   return (
     <section className="hero-container" style={{ position: 'relative', overflow: 'hidden' }}>
@@ -67,7 +67,7 @@ export default function HeroBanner({
           <div style={{
             position: 'absolute',
             inset: 0,
-            backgroundImage: `url(${movie.backdrop})`,
+            backgroundImage: `url(${movie.backdrop || movie.poster})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             opacity: 0.18,
@@ -87,7 +87,6 @@ export default function HeroBanner({
           }}>
             {/* Left Column */}
             <div>
-              {/* Badges */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', marginBottom: '14px' }}>
                 <div style={{
                   background: 'linear-gradient(135deg, #e11d48, #be123c)',
@@ -123,7 +122,7 @@ export default function HeroBanner({
                   alignItems: 'center',
                   gap: '4px'
                 }}>
-                  <ShieldCheck size={13} /> 4K Ultra HD
+                  <ShieldCheck size={13} /> 1080p Full HD
                 </div>
               </div>
 
@@ -173,7 +172,7 @@ export default function HeroBanner({
                   }}
                 >
                   <Play size={18} fill="#ffffff" />
-                  <span>Treylerni tomosha qilish</span>
+                  <span>Filmni tomosha qilish</span>
                 </button>
 
                 <button
@@ -200,7 +199,7 @@ export default function HeroBanner({
                   display: 'inline-block',
                   boxShadow: '0 0 10px #22c55e'
                 }} />
-                <span><strong>1,840 kishi</strong> hozir ushbu filmni koʻrmoqda</span>
+                <span><strong>1,840 kishi</strong> hozir ushbu filmni tomosha qilmoqda</span>
               </div>
             </div>
 
@@ -229,6 +228,9 @@ export default function HeroBanner({
                     height: '100%',
                     objectFit: 'cover',
                     filter: 'brightness(0.75)'
+                  }}
+                  onError={(e) => {
+                    e.target.src = 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=1600&auto=format&fit=crop&q=80';
                   }}
                 />
 
@@ -261,7 +263,7 @@ export default function HeroBanner({
                     letterSpacing: '1px',
                     textTransform: 'uppercase'
                   }}>
-                    Rasmiy Treyler (HD)
+                    HD Filmni Koʻrish
                   </span>
                 </div>
 
@@ -290,7 +292,7 @@ export default function HeroBanner({
                 maxWidth: '380px',
                 justifyContent: 'space-between'
               }}>
-                {featuredMovies.map((m, idx) => {
+                {featuredMovies.slice(0, 4).map((m, idx) => {
                   const isSelected = currentIndex === idx;
                   return (
                     <div
@@ -313,6 +315,9 @@ export default function HeroBanner({
                         src={m.backdrop || m.poster}
                         alt={m.title}
                         style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        onError={(e) => {
+                          e.target.src = 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800&auto=format&fit=crop&q=80';
+                        }}
                       />
                       <div style={{
                         position: 'absolute',
@@ -346,18 +351,14 @@ export default function HeroBanner({
         marginTop: '14px'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <Flame size={15} /> <span>TOP 5 KINOLAR:</span>
+          <Flame size={15} /> <span>TOP TRENDDAGI FILMLAR:</span>
         </div>
         <div style={{ display: 'flex', gap: '14px', color: '#e2e8f0', fontWeight: 500, flexWrap: 'wrap' }}>
-          <span>#1 Dune: Part Two</span>
-          <span>•</span>
-          <span>#2 Inception</span>
-          <span>•</span>
-          <span>#3 Interstellar</span>
-          <span>•</span>
-          <span>#4 The Dark Knight</span>
-          <span>•</span>
-          <span>#5 Oppenheimer</span>
+          {featuredMovies.slice(0, 5).map((m, i) => (
+            <span key={m.id} style={{ cursor: 'pointer' }} onClick={() => onSelectMovie(m)}>
+              #{i + 1} {m.title} (⭐ {m.rating})
+            </span>
+          ))}
         </div>
       </div>
     </section>
