@@ -290,7 +290,7 @@ export default function AuthPage({ onLoginSuccess }) {
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="Masalan: Humoyun"
+                  placeholder="Ismingiz"
                   style={{
                     width: '100%',
                     background: 'rgba(255, 255, 255, 0.06)',
@@ -319,7 +319,7 @@ export default function AuthPage({ onLoginSuccess }) {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="user@kino.uz"
+                placeholder="Email manzilingiz"
                 style={{
                   width: '100%',
                   background: 'rgba(255, 255, 255, 0.06)',
@@ -347,7 +347,7 @@ export default function AuthPage({ onLoginSuccess }) {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••"
+                placeholder="Parol"
                 style={{
                   width: '100%',
                   background: 'rgba(255, 255, 255, 0.06)',
@@ -376,7 +376,7 @@ export default function AuthPage({ onLoginSuccess }) {
                   type="password"
                   value={confirmPass}
                   onChange={(e) => setConfirmPass(e.target.value)}
-                  placeholder="••••••"
+                  placeholder="Parolni tasdiqlang"
                   style={{
                     width: '100%',
                     background: 'rgba(255, 255, 255, 0.06)',

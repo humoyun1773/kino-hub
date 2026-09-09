@@ -69,7 +69,7 @@ export default function Navbar({
           type="text"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder="Film nomi, rejissyor yoki aktyorlarni qidiring..."
+          placeholder="Film yoki seriallarni qidirish..."
           style={{
             width: '100%',
             background: 'rgba(255, 255, 255, 0.06)',

@@ -92,7 +92,7 @@ export default function ApiKeyModal({
             type="password"
             value={inputKey}
             onChange={(e) => setInputKey(e.target.value)}
-            placeholder="Masalan: 3fd2b99b7a6..."
+            placeholder="TMDB API kalitingizni kiriting"
             style={{
               width: '100%',
               background: 'rgba(255, 255, 255, 0.06)',
