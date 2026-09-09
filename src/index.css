@@ -14,41 +14,26 @@ body {
 
 /* Animations */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(12px); }
+  from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes scaleUp {
-  from { opacity: 0; transform: scale(0.94); }
+  from { opacity: 0; transform: scale(0.95); }
   to { opacity: 1; transform: scale(1); }
-}
-
-@keyframes pulseGlow {
-  0%, 100% { box-shadow: 0 0 15px rgba(225, 29, 72, 0.3); }
-  50% { box-shadow: 0 0 30px rgba(225, 29, 72, 0.6); }
 }
 
 @keyframes floatSlow {
   0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-8px); }
-}
-
-@keyframes spinSlow {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+  50% { transform: translateY(-6px); }
 }
 
 .animate-fade-in {
-  animation: fadeIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .animate-scale-up {
-  animation: scaleUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: scaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .animate-float {
@@ -57,8 +42,8 @@ body {
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
   background: #06080d;
@@ -71,17 +56,16 @@ body {
   background: #334155;
 }
 
-/* Glassmorphism & Header */
+/* Header & Glass */
 .glass-header {
-  background: rgba(6, 8, 13, 0.82);
+  background: rgba(9, 13, 22, 0.88);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  transition: all 0.3s ease;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
 }
 
 .glass-card {
-  background: rgba(15, 20, 32, 0.75);
+  background: rgba(15, 20, 32, 0.8);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -105,8 +89,6 @@ body {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  position: relative;
-  overflow: hidden;
 }
 .btn-primary:hover {
   background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);
@@ -132,34 +114,23 @@ body {
 }
 .btn-secondary:hover {
   background: rgba(255, 255, 255, 0.14);
-  border-color: rgba(255, 255, 255, 0.28);
+  border-color: rgba(255, 255, 255, 0.25);
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px -4px rgba(0, 0, 0, 0.5);
-}
-.btn-secondary:active {
-  transform: translateY(0);
 }
 
 .movie-card {
   position: relative;
   border-radius: 16px;
   overflow: hidden;
-  background: #0f1422;
+  background: #0d121f;
   border: 1px solid rgba(255, 255, 255, 0.07);
-  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
 }
 .movie-card:hover {
-  transform: translateY(-10px) scale(1.02);
+  transform: translateY(-8px) scale(1.02);
   border-color: rgba(244, 63, 94, 0.45);
-  box-shadow: 0 24px 36px -12px rgba(0, 0, 0, 0.9), 0 0 25px rgba(225, 29, 72, 0.3);
-}
-
-.movie-card img {
-  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.movie-card:hover img {
-  transform: scale(1.08);
+  box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.9), 0 0 20px rgba(225, 29, 72, 0.3);
 }
 
 .badge-rating {
@@ -174,7 +145,6 @@ body {
   align-items: center;
   gap: 5px;
   font-size: 13px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
 }
 
 .line-clamp-2 {
@@ -189,4 +159,37 @@ body {
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+/* Responsive Sidebar Rules */
+@media (max-width: 1024px) {
+  .sidebar-responsive {
+    position: fixed !important;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    transform: translateX(-100%);
+    box-shadow: 20px 0 50px rgba(0, 0, 0, 0.8);
+  }
+  .sidebar-open {
+    transform: translateX(0) !important;
+  }
+  .mobile-close-btn {
+    display: block !important;
+  }
+  .mobile-brand {
+    display: flex !important;
+  }
+  .hide-on-mobile {
+    display: none;
+  }
+}
+
+@media (min-width: 1025px) {
+  .mobile-menu-btn {
+    display: none !important;
+  }
+  .lg-hidden {
+    display: none !important;
+  }
 }
