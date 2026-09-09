@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search, Dices, KeyRound, X, Menu, Film } from 'lucide-react';
+import { Search, Dices, KeyRound, X, Sidebar, Film } from 'lucide-react';
 
 export default function Navbar({
   searchTerm,
@@ -22,37 +22,40 @@ export default function Navbar({
       justifyContent: 'space-between',
       gap: '16px'
     }}>
-      {/* Left: Single Clean Toggle Button & Dynamic Brand */}
+      {/* Left: Dedicated Sidebar Toggle Button & Dynamic Brand */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-        {/* Single Clean Menu Toggle Button */}
+        {/* Dedicated Sidebar Toggle Button */}
         <button
           onClick={onToggleSidebar}
           style={{
-            background: 'rgba(255, 255, 255, 0.07)',
-            border: '1px solid rgba(255, 255, 255, 0.12)',
+            background: isSidebarOpen ? 'rgba(225, 29, 72, 0.15)' : 'rgba(255, 255, 255, 0.07)',
+            border: isSidebarOpen ? '1px solid rgba(225, 29, 72, 0.4)' : '1px solid rgba(255, 255, 255, 0.12)',
             borderRadius: '10px',
-            color: isSidebarOpen ? '#f43f5e' : '#fff',
+            color: isSidebarOpen ? '#f43f5e' : '#e2e8f0',
             width: '40px',
             height: '40px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             cursor: 'pointer',
-            transition: 'all 0.2s ease'
+            transition: 'all 0.2s ease',
+            boxShadow: isSidebarOpen ? '0 0 14px rgba(225, 29, 72, 0.3)' : 'none'
           }}
-          title={isSidebarOpen ? "Katalogni yopish" : "Katalogni ochish"}
+          title={isSidebarOpen ? "Katalog panelini yopish" : "Katalog panelini ochish"}
           onMouseEnter={(e) => {
-            e.currentTarget.style.background = 'rgba(225, 29, 72, 0.15)';
-            e.currentTarget.style.borderColor = 'rgba(225, 29, 72, 0.4)';
+            e.currentTarget.style.background = 'rgba(225, 29, 72, 0.2)';
+            e.currentTarget.style.borderColor = 'rgba(225, 29, 72, 0.5)';
             e.currentTarget.style.color = '#f43f5e';
+            e.currentTarget.style.transform = 'scale(1.04)';
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.07)';
-            e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.12)';
-            e.currentTarget.style.color = isSidebarOpen ? '#f43f5e' : '#fff';
+            e.currentTarget.style.background = isSidebarOpen ? 'rgba(225, 29, 72, 0.15)' : 'rgba(255, 255, 255, 0.07)';
+            e.currentTarget.style.borderColor = isSidebarOpen ? 'rgba(225, 29, 72, 0.4)' : 'rgba(255, 255, 255, 0.12)';
+            e.currentTarget.style.color = isSidebarOpen ? '#f43f5e' : '#e2e8f0';
+            e.currentTarget.style.transform = 'scale(1)';
           }}
         >
-          <Menu size={20} />
+          <Sidebar size={20} />
         </button>
 
         {/* Brand Logo in Navbar (shows when sidebar is closed to prevent duplication) */}
