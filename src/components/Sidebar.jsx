@@ -16,8 +16,7 @@ import {
   LogOut, 
   X,
   Sparkles,
-  SlidersHorizontal,
-  ChevronLeft
+  SlidersHorizontal
 } from 'lucide-react';
 import { GENRES } from '../data/moviesData';
 
@@ -102,12 +101,11 @@ export default function Sidebar({
         className={`collapsible-sidebar ${isOpen ? 'is-open' : 'is-closed'}`}
       >
         <div style={{ width: '270px', height: '100%', display: 'flex', flexDirection: 'column' }}>
-          {/* Sidebar Top Header with Close Button */}
+          {/* Sidebar Top Header */}
           <div style={{
             padding: '18px 20px',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'space-between',
             borderBottom: '1px solid rgba(255, 255, 255, 0.06)'
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -132,35 +130,6 @@ export default function Sidebar({
                 </span>
               </div>
             </div>
-
-            {/* Close / Collapse button */}
-            <button
-              onClick={onClose}
-              style={{
-                width: '32px',
-                height: '32px',
-                borderRadius: '8px',
-                background: 'rgba(255, 255, 255, 0.06)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                color: '#94a3b8',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease'
-              }}
-              title="Katalogni yopish"
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = '#fff';
-                e.currentTarget.style.background = 'rgba(225, 29, 72, 0.2)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = '#94a3b8';
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.06)';
-              }}
-            >
-              <ChevronLeft size={18} />
-            </button>
           </div>
 
           {/* Navigation Scrollable Body */}

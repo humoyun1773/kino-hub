@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search, Dices, KeyRound, X, Menu, Film, PanelLeftClose, PanelLeftOpen } from 'lucide-react';
+import { Search, Dices, KeyRound, X, Menu, Film } from 'lucide-react';
 
 export default function Navbar({
   searchTerm,
@@ -22,14 +22,14 @@ export default function Navbar({
       justifyContent: 'space-between',
       gap: '16px'
     }}>
-      {/* Left: Toggle Button & Logo */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-        {/* Toggle Sidebar Button (Visible on ALL devices) */}
+      {/* Left: Single Clean Toggle Button & Dynamic Brand */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        {/* Single Clean Menu Toggle Button */}
         <button
           onClick={onToggleSidebar}
           style={{
-            background: isSidebarOpen ? 'rgba(225, 29, 72, 0.15)' : 'rgba(255, 255, 255, 0.08)',
-            border: isSidebarOpen ? '1px solid rgba(225, 29, 72, 0.4)' : '1px solid rgba(255, 255, 255, 0.14)',
+            background: 'rgba(255, 255, 255, 0.07)',
+            border: '1px solid rgba(255, 255, 255, 0.12)',
             borderRadius: '10px',
             color: isSidebarOpen ? '#f43f5e' : '#fff',
             width: '40px',
@@ -38,41 +38,52 @@ export default function Navbar({
             alignItems: 'center',
             justifyContent: 'center',
             cursor: 'pointer',
-            transition: 'all 0.25s ease',
-            boxShadow: isSidebarOpen ? '0 0 12px rgba(225, 29, 72, 0.3)' : 'none'
+            transition: 'all 0.2s ease'
           }}
           title={isSidebarOpen ? "Katalogni yopish" : "Katalogni ochish"}
-        >
-          {isSidebarOpen ? <PanelLeftClose size={20} /> : <PanelLeftOpen size={20} />}
-        </button>
-
-        {/* Brand Logo in Navbar */}
-        <div
-          onClick={() => setSearchTerm('')}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '9px',
-            cursor: 'pointer',
-            userSelect: 'none'
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = 'rgba(225, 29, 72, 0.15)';
+            e.currentTarget.style.borderColor = 'rgba(225, 29, 72, 0.4)';
+            e.currentTarget.style.color = '#f43f5e';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.07)';
+            e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.12)';
+            e.currentTarget.style.color = isSidebarOpen ? '#f43f5e' : '#fff';
           }}
         >
-          <div style={{
-            width: '34px',
-            height: '34px',
-            borderRadius: '10px',
-            background: 'linear-gradient(135deg, #e11d48, #be123c)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            boxShadow: '0 0 14px rgba(225, 29, 72, 0.5)'
-          }}>
-            <Film size={18} color="#ffffff" />
+          <Menu size={20} />
+        </button>
+
+        {/* Brand Logo in Navbar (shows when sidebar is closed to prevent duplication) */}
+        {!isSidebarOpen && (
+          <div
+            onClick={() => setSearchTerm('')}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '9px',
+              cursor: 'pointer',
+              userSelect: 'none'
+            }}
+          >
+            <div style={{
+              width: '34px',
+              height: '34px',
+              borderRadius: '10px',
+              background: 'linear-gradient(135deg, #e11d48, #be123c)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: '0 0 14px rgba(225, 29, 72, 0.5)'
+            }}>
+              <Film size={18} color="#ffffff" />
+            </div>
+            <span className="gradient-title" style={{ fontSize: '20px', fontWeight: 800, letterSpacing: '-0.5px' }}>
+              KinoHub
+            </span>
           </div>
-          <span className="gradient-title" style={{ fontSize: '20px', fontWeight: 800, letterSpacing: '-0.5px' }}>
-            KinoHub
-          </span>
-        </div>
+        )}
       </div>
 
       {/* Center Search Bar */}
